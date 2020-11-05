@@ -57,10 +57,11 @@ jobs:
           echo "schematronRoot: ${schematronRoot}"
           echo "schematron code ${{ github.workspace }}/resources/validations/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl"
           mkdir /tmp/target
-          rm -rf /tmp/target/*.xsl;
+          rm -rf /tmp/target/*.xsl
+
           java -cp ${SAXON_CP} net.sf.saxon.Transform \
-          -o:target/"${schematronRoot}".xsl \
-          -s:"${qualifiedSchematronName}" \
+          -o:target/"${{ github.workspace }}${schematronRoot}".xsl \
+          -s:"${{ github.workspace }}${qualifiedSchematronName}" \
           lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
           allow-foreign=true
 
