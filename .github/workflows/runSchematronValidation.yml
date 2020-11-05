@@ -45,6 +45,7 @@ jobs:
       # convert schematron to xsl and validate file with converted xsl
       - name: Convert to XSL
         run: |
+          export SAXON_CP=/tmp/saxon/Saxon-HE-10.2.jar
           echo "convert to xsl"
           # compute name without .sch
           qualifiedSchematronName=${{ github.event.inputs.schematronFileName }}
@@ -57,7 +58,12 @@ jobs:
           echo "schematron code ${{ github.workspace }}/resources/validations/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl"
           mkdir /tmp/target
           rm -rf /tmp/target/*.xsl;
-          java -cp ${SAXON_CP} -xsl:net.sf.saxon.Transform ${{ github.workspace }}/resources/validations/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl
+          java -cp ${SAXON_CP} net.sf.saxon.Transform \
+          -o:target/"${schematronRoot}".xsl \
+          -s:"${qualifiedSchematronName}" \
+          lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
+          allow-foreign=true
+
           echo "delete pre-existing SVRL and HTML results"
           rm -rf "${reportName}" "${htmlReportName}"
 
