@@ -65,7 +65,7 @@ jobs:
           ${{ github.workspace }}/resources/validations/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
           allow-foreign=true
 
-          reportName=${{ github.workspace }}/resources/validations/report/schematron/${{ github.event.inputs.DOC_TO_VALIDATE }}}__${schematronRoot}.results.xml"
+          reportName=${{ github.workspace }}/resources/validations/report/schematron/${{ github.event.inputs.DOC_TO_VALIDATE }}}__${schematronRoot}.results.xml
 
           echo "delete pre-existing SVRL and HTML results"
           rm -rf "${reportName}" "${htmlReportName}"
