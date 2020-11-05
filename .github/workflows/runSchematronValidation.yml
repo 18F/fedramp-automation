@@ -62,7 +62,7 @@ jobs:
           java -cp ${SAXON_CP} net.sf.saxon.Transform \
           -o:target/"${{ github.workspace }}${schematronRoot}".xsl \
           -s:"${{ github.workspace }}${qualifiedSchematronName}" \
-          ${{ github.workspace }}lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
+          ${{ github.workspace }}/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
           allow-foreign=true
 
           echo "delete pre-existing SVRL and HTML results"
