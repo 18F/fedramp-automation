@@ -59,9 +59,6 @@ jobs:
           mkdir /tmp/target
           rm -rf /tmp/target/*.xsl
 
-          ls -R /home/runner/work/fedramp-automation/fedramp-automation/lib/schematron/trunk/schematron/code/
-                /home/runner/work/fedramp-automation/fedramp-automation/resources/validations
-
           java -cp ${SAXON_CP} net.sf.saxon.Transform \
           -o:target/"${{ github.workspace }}/${schematronRoot}".xsl \
           -s:"${{ github.workspace }}/${qualifiedSchematronName}" \
