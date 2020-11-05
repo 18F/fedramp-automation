@@ -59,12 +59,13 @@ jobs:
           mkdir /tmp/target
           rm -rf /tmp/target/*.xsl
 
-          ls -ltr /home/runner/work/fedramp-automation/fedramp-automation/lib/schematron/trunk/schematron/code/
+          ls -R /home/runner/work/fedramp-automation/fedramp-automation/lib/schematron/trunk/schematron/code/
+                /home/runner/work/fedramp-automation/fedramp-automation/resources/validations
 
           java -cp ${SAXON_CP} net.sf.saxon.Transform \
           -o:target/"${{ github.workspace }}/${schematronRoot}".xsl \
           -s:"${{ github.workspace }}/${qualifiedSchematronName}" \
-          ${{ github.workspace }}/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
+          ${{ github.workspace }}/resources/validations/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
           allow-foreign=true
 
           echo "delete pre-existing SVRL and HTML results"
