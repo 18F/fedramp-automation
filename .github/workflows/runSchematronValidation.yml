@@ -83,7 +83,7 @@ jobs:
           echo `ls -ltr ${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }}`
 
           java -cp "${SAXON_CP}" net.sf.saxon.Transform \
-          -o:${reportName} 
+          -o:${reportName} \
           -s:${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }} \
           ${{ github.workspace }}/resources/validations/target/${schematronRoot}.xsl \
           allow-foreign=true
