@@ -25,6 +25,13 @@ jobs:
     steps:
       # Check-out the repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v2
+
+      - name: Cache
+        uses: actions/cache@v2.1.3
+        with:
+          path: |
+            ~/resources/validations/lib/
+            ~/oscal
         
       # Check-out submodules
       - name: Checkout submodules
@@ -72,6 +79,7 @@ jobs:
           echo "validating doc: ${{ github.event.inputs.DOC_TO_VALIDATE }} with ${qualifiedSchematronName} output found in ${reportName}"
 
           java -cp "${SAXON_CP}" net.sf.saxon.Transform \
-          -o:${reportName} -s:${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }} \
+          -o:${reportName} 
+          -s:${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }} \
           ${{ github.workspace }}/resources/validations/target/${schematronRoot}.xsl \
           allow-foreign=true
