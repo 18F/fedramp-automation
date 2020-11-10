@@ -19,7 +19,7 @@ To validate xml files using schematron
 
 example
 
-`./validate_with_schematron.sh test/demo/FedRAMP-SSP-OSCAL-Template.xml`
+`./bin/validate_with_schematron.sh test/demo/FedRAMP-SSP-OSCAL-Template.xml`
 
 you must pass in a file name you want validated as argument `$1`. by default it will compile and validate the input with all `src/*.sch` files.
 
