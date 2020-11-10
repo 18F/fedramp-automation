@@ -32,6 +32,7 @@ jobs:
           path: |
             ~/resources/validations/lib/
             ~/oscal
+          key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
         
       # Check-out submodules
       - name: Checkout submodules
