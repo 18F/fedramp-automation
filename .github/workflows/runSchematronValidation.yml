@@ -31,7 +31,8 @@ jobs:
         with:
           path: |
             ~/resources/validations/lib/
-            ~/oscal
+            ~/oscal/
+            /tmp/saxon/
           key: ${{ runner.os }}-${{ hashFiles('**/lockfiles') }}
         
       # Check-out submodules
@@ -78,6 +79,8 @@ jobs:
           rm -rf "${reportName}" "${htmlReportName}"
 
           echo "validating doc: ${{ github.event.inputs.DOC_TO_VALIDATE }} with ${qualifiedSchematronName} output found in ${reportName}"
+          echo source
+          echo `ls -ltr ${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }}`
 
           java -cp "${SAXON_CP}" net.sf.saxon.Transform \
           -o:${reportName} 
