@@ -18,11 +18,27 @@ SAXON_OPTS="${SAXON_OPTS:-allow-foreign=true}"
 
 echo "using saxon version ${SAXON_VERSION}"
 
-mvn -q org.apache.maven.plugins:maven-dependency-plugin:2.1:get \
-    -DrepoUrl=https://mvnrepository.com/ \
-    -DartifactId=Saxon-HE \
-    -DgroupId=net.sf.saxon \
-    -Dversion="${SAXON_VERSION}"
+saxonLocation=saxon/Saxon-HE/"${SAXON_VERSION}"/Saxon-HE-"${SAXON_VERSION}".jar
+echo saxonLocation: "${saxonLocation}"
+echo SAXON_CP: "${SAXON_CP}"
+#should we detect if SAXON_CP exists? if so, skip this?
+if [ -n "$SAXON_CP" ]
+then
+    echo SAXON_CP is "${SAXON_CP}"
+elif command -v mvn &> /dev/null 
+then
+    echo mvn found, retrieving saxon jar
+    mvn -q org.apache.maven.plugins:maven-dependency-plugin:2.1:get \
+        -DrepoUrl=https://mvnrepository.com/ \
+        -DartifactId=Saxon-HE \
+        -DgroupId=net.sf.saxon \
+        -Dversion="${SAXON_VERSION}"
+    SAXON_CP=~/.m2/repository/net/sf/${saxonLocation}
+else
+    echo No mvn detected getting saxon by curl
+    SAXON_CP=lib/Saxon-HE-"${SAXON_VERSION}".jar
+    curl -H "Accept: application/zip" -o "${SAXON_CP}" https://repo1.maven.org/maven2/net/sf/"${saxonLocation}"
+fi
 
 # Delete pre-existing SVRL report
 rm -rf report/schematron/*.results.xml
@@ -35,9 +51,8 @@ for qualifiedSchematronName in src/*.sch; do
     schematronRoot=${schematronName%.*}
     
     # Use Saxon XSL transform to convert our Schematron to pure XSL 2.0 stylesheet
-    saxon_jar=~/.m2/repository/net/sf/saxon/Saxon-HE/"${SAXON_VERSION}"/Saxon-HE-"${SAXON_VERSION}".jar
 
-    java -cp "${saxon_jar}" net.sf.saxon.Transform \
+    java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:target/"${schematronRoot}".xsl \
         -s:"${qualifiedSchematronName}" \
         lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
@@ -55,16 +70,16 @@ for qualifiedSchematronName in src/*.sch; do
 
     echo "validating doc: ${DOC_TO_VALIDATE} with ${qualifiedSchematronName} output found in ${reportName}"
 
-    java -cp "${saxon_jar}" net.sf.saxon.Transform \
+    java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${reportName}" \
         -s:"${DOC_TO_VALIDATE}" \
         target/"${schematronRoot}".xsl \
-        $SAXON_OPTS
+        "$SAXON_OPTS"
 
-    java -cp "${saxon_jar}" net.sf.saxon.Transform \
+    java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${htmlReportName}" \
         -s:"${reportName}"  \
         lib/svrl2html.xsl \
-        $SAXON_OPTS
+        "$SAXON_OPTS"
 
 done
