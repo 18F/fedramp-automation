@@ -22,14 +22,14 @@ saxonLocation=saxon/Saxon-HE/"${SAXON_VERSION}"/Saxon-HE-"${SAXON_VERSION}".jar
 #should we detect if SAXON_CP exists? if so, skip this?
 if test -n "$SAXON_CP" ; then
     echo SAXON_CP evn variable used is "${SAXON_CP}"
-elif command -v mavn &> /dev/null ;then
+elif command -v mvn &> /dev/null ;then
     mvn -q org.apache.maven.plugins:maven-dependency-plugin:2.1:get \
         -DrepoUrl=https://mvnrepository.com/ \
         -DartifactId=Saxon-HE \
         -DgroupId=net.sf.saxon \
         -Dversion="${SAXON_VERSION}"
     SAXON_CP=~/.m2/repository/net/sf/${saxonLocation}
-elif command -v curl2 &> /dev/null; then
+elif command -v curl &> /dev/null; then
     SAXON_CP=lib/Saxon-HE-"${SAXON_VERSION}".jar
     curl -H "Accept: application/zip" -o "${SAXON_CP}" https://repo1.maven.org/maven2/net/sf/"${saxonLocation}"
 else
