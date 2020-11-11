@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-if [ ! -e  "$1" ]; then
+if test ! -e  "$1" ; then
     echo "no file input for report, exiting"
     exit 1
 fi
@@ -19,25 +19,22 @@ SAXON_OPTS="${SAXON_OPTS:-allow-foreign=true}"
 echo "using saxon version ${SAXON_VERSION}"
 
 saxonLocation=saxon/Saxon-HE/"${SAXON_VERSION}"/Saxon-HE-"${SAXON_VERSION}".jar
-echo saxonLocation: "${saxonLocation}"
-echo SAXON_CP: "${SAXON_CP}"
 #should we detect if SAXON_CP exists? if so, skip this?
-if [ -n "$SAXON_CP" ]
-then
-    echo SAXON_CP is "${SAXON_CP}"
-elif command -v mvn &> /dev/null 
-then
-    echo mvn found, retrieving saxon jar
+if test -n "$SAXON_CP" ; then
+    echo SAXON_CP evn variable used is "${SAXON_CP}"
+elif command -v mavn &> /dev/null ;then
     mvn -q org.apache.maven.plugins:maven-dependency-plugin:2.1:get \
         -DrepoUrl=https://mvnrepository.com/ \
         -DartifactId=Saxon-HE \
         -DgroupId=net.sf.saxon \
         -Dversion="${SAXON_VERSION}"
     SAXON_CP=~/.m2/repository/net/sf/${saxonLocation}
-else
-    echo No mvn detected getting saxon by curl
+elif command -v curl2 &> /dev/null; then
     SAXON_CP=lib/Saxon-HE-"${SAXON_VERSION}".jar
     curl -H "Accept: application/zip" -o "${SAXON_CP}" https://repo1.maven.org/maven2/net/sf/"${saxonLocation}"
+else
+    echo "SAXON_CP environment variable is not set. mvn or curl is required to download dependencies, neither found, please install one and retry"
+    exit 1
 fi
 
 # Delete pre-existing SVRL report
@@ -65,7 +62,6 @@ for qualifiedSchematronName in src/*.sch; do
     reportName="report/schematron/${DOC_TO_VALIDATE}__${schematronRoot}.results.xml"
     htmlReportName="report/schematron/${DOC_TO_VALIDATE}__${schematronRoot}.results.html"
 
-    echo "delete pre-existing SVRL and HTML results"
     rm -rf "${reportName}" "${htmlReportName}"
 
     echo "validating doc: ${DOC_TO_VALIDATE} with ${qualifiedSchematronName} output found in ${reportName}"
