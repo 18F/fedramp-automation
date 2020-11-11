@@ -20,13 +20,17 @@ To validate xml files using schematron
 *Prerequesite
 if you haven't done it previously: to add the needed dependencies (declared by .gitmodules), run the following:*
 
+`-f` *\<required>* is the input file to be tested. ex: `-f test/demo/FedRAMP-SSP-OSCAL-Template.xml`
+
+`-s` *\<optional>* schematron directory used to validate the file. Each .sch found will be compliled and generate a separate report. defaults to src/*.sch relative to this script.  ex: `-o ~/mySchematronDirectory`
+
+`-o` *\<optional>* is an the root of the report output. ex: `-o ~/dev`
+
+`-v` *\<optional>* if you wish to override the default version (currently 10.2) of `SAXON HE`, that is downloaded and used if $SAXON_CP is not specified. ex:  `-v 10.2.2`
+
 example
 
-`./bin/validate_with_schematron.sh test/demo/FedRAMP-SSP-OSCAL-Template.xml`
-
-you must pass in a file name you want validated as argument `$1`. by default it will compile and validate the input with all `src/*.sch` files.
-
-if you wish to override the default version (currently 10.2) of `SAXON HE`, you may pass it as the argument `$2`
+`./bin/validate_with_schematron.sh -f test/demo/FedRAMP-SSP-OSCAL-Template.xml -o ~/dev -v 10.2.2`
 
 To Run Tests
 ---
