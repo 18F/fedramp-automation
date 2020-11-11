@@ -6,3 +6,4 @@ resources/validations/src/ssp.xsl
 resources/validations/report
 resources/validations/target
 *.DS_Store
+resources/validations/lib/**.jar
