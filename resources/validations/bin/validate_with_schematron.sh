@@ -82,6 +82,7 @@ rm -rf target/*.xsl;
 
 #if version not specified default
 SAXON_VERSION=${SAXON_VERSION:-10.2}
+LIB_DIR=${LIB_DIR:-lib}
 SAXON_OPTS="${SAXON_OPTS:-allow-foreign=true}"
 
 echo "using saxon version ${SAXON_VERSION}"
@@ -97,7 +98,6 @@ elif command -v mvn &> /dev/null ;then
         -Dversion="${SAXON_VERSION}"
     SAXON_CP=~/.m2/repository/net/sf/${saxonLocation}
 elif command -v curl &> /dev/null; then
-    LIB_DIR=${LIB_DIR:-lib}
     SAXON_CP="${LIB_DIR}"/Saxon-HE-"${SAXON_VERSION}".jar
     curl -H "Accept: application/zip" -o "${SAXON_CP}" https://repo1.maven.org/maven2/net/sf/"${saxonLocation}" &> /dev/null
 else
@@ -137,7 +137,7 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:target/"${schematronRoot}".xsl \
         -s:"${qualifiedSchematronName}" \
-        lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
+        "${LIB_DIR}"/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
         $SAXON_OPTS
 
     echo "compiling: ${qualifiedSchematronName} to: target/${schematronRoot}.xsl"
@@ -162,7 +162,7 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${htmlReportName}" \
         -s:"${reportName}"  \
-        lib/svrl2html.xsl \
+        "${LIB_DIR}"/svrl2html.xsl \
         $SAXON_OPTS
 
 done
