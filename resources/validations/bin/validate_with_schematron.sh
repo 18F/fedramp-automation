@@ -6,12 +6,13 @@ usage() {
         echo "$1"
         echo
     fi
-    echo "Usage: validate_with_schematron.sh [-s directoryName|-o reportDirectory|-v saxonVersionNumber|-h] -f file"
+    echo "Usage: validate_with_schematron.sh [-s directoryName|-o reportDirectory|-l libInstallDirectory|-v saxonVersionNumber|-h] -f file"
     echo
     echo "  -f    fileName               the input file to be tested."
     echo "  -s    directoryName          schematron directory containing .sch files used to validate"
     echo "  -o    rootDirectory          is an the root of the report output."
     echo "  -v    saxonVersionNumber     if you wish to override the default version to be downloaded"
+    echo "  -l    libInstallDirectory    if you wish to override the default install location for libraries (if needed)"
     echo "  -h                           display this help message"
 }
 
@@ -49,6 +50,11 @@ while echo "$1" | grep -- ^- > /dev/null 2>&1; do
             shift
             OUTPUT_ROOT="$1"
             ;;
+        # lib directory root
+        -l)
+            shift
+            LIB_DIR="$1"
+            ;;
         # Help!
         -h)
             usage
@@ -64,7 +70,6 @@ while echo "$1" | grep -- ^- > /dev/null 2>&1; do
 done
 
 echo output dir "${OUTPUT_ROOT}"
-echo to val "$DOC_TO_VALIDATE";
 if test ! -e  "$DOC_TO_VALIDATE" ; then
     echo "no file input for report, exiting"
     exit 1
@@ -92,16 +97,16 @@ elif command -v mvn &> /dev/null ;then
         -Dversion="${SAXON_VERSION}"
     SAXON_CP=~/.m2/repository/net/sf/${saxonLocation}
 elif command -v curl &> /dev/null; then
-    SAXON_CP=lib/Saxon-HE-"${SAXON_VERSION}".jar
-    curl -H "Accept: application/zip" -o "${SAXON_CP}" https://repo1.maven.org/maven2/net/sf/"${saxonLocation}"
+    LIB_DIR=${LIB_DIR:-lib}
+    SAXON_CP="${LIB_DIR}"/Saxon-HE-"${SAXON_VERSION}".jar
+    curl -H "Accept: application/zip" -o "${SAXON_CP}" https://repo1.maven.org/maven2/net/sf/"${saxonLocation}" &> /dev/null
 else
     echo "SAXON_CP environment variable is not set. mvn or curl is required to download dependencies, neither found, please install one and retry"
     exit 1
 fi
 
-
 if test -f "${SAXON_CP}" ; then
-    java -cp "${SAXON_CP}" net.sf.saxon.Transform -?
+    java -cp "${SAXON_CP}" net.sf.saxon.Transform -? &> /dev/null
     retval=$?
     echo retVal: $retval
     if  test $retval -eq 0 ; then

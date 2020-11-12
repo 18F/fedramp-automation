@@ -22,11 +22,15 @@ if you haven't done it previously: to add the needed dependencies (declared by .
 
 `-f` *\<required>* is the input file to be tested. ex: `-f test/demo/FedRAMP-SSP-OSCAL-Template.xml`
 
-`-s` *\<optional>* schematron directory used to validate the file. Each .sch found within the specified directory will be compliled and generate a separate report. defaults to src relative to this script.  ex: `-o ~/mySchematronDirectory`
+`-s` *\<optional>* schematron directory used to validate the file. Each .sch found within the specified directory will be compliled and generate a separate report. defaults to src relative to the parent of the bin directory where this script is located.  ex: `-o ~/mySchematronDirectory`
 
-`-o` *\<optional>* is an the root of the report output. ex: `-o ~/dev`
+`-o` *\<optional>* is the root directory of the report output. ex: `-o ~/dev`
+
+`-l` *\<optional>* is a directory to install any libraries that may be needed defaults to lib relative to the parent of the bin directory where this script is located. ex: `-o ~/dev`
 
 `-v` *\<optional>* if you wish to override the default version (currently 10.2) of `SAXON HE`, that is downloaded and used if $SAXON_CP is not specified. ex:  `-v 10.2.2` *Note,  SAXON_CP is set as an Environment Variable. and `-v` is specified, the script will terminate due to inability to determine priority.*
+
+`-h` *\<optional>* outputs the help/usage for the script.`
 
 example:
 
