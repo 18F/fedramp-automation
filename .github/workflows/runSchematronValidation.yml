@@ -48,4 +48,4 @@ jobs:
           -f ${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }}  \
           -s ${{ github.workspace }}${{ github.event.inputs.schematronFileName }} \
           -l /tmp/lib \
-          -o /tmp/report\
+          -o /tmp/report
