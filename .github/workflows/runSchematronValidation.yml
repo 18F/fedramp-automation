@@ -45,7 +45,7 @@ jobs:
       - name: Run Schematron Validations
         run: |
           bash -xv ${{ github.workspace }}/resources/validations/bin/validate_with_schematron.sh \
-          -f ${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }}  
-          -s ${{ github.workspace }}${{ github.event.inputs.schematronFileName }} 
-          -l /tmp/lib 
-          -o /tmp/report
+          -f ${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }}  \
+          -s ${{ github.workspace }}${{ github.event.inputs.schematronFileName }} \
+          -l /tmp/lib \
+          -o /tmp/report\
