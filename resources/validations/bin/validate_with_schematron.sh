@@ -112,12 +112,12 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     schematronRoot=${schematronName%.*}
     
     # Use Saxon XSL transform to convert our Schematron to pure XSL 2.0 stylesheet
-
+    # shellcheck disable=2086
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:target/"${schematronRoot}".xsl \
         -s:"${qualifiedSchematronName}" \
         lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
-        "$SAXON_OPTS"
+        $SAXON_OPTS
 
     echo "compiling: ${qualifiedSchematronName} to: target/${schematronRoot}.xsl"
    
@@ -130,16 +130,18 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
 
     echo "validating doc: ${DOC_TO_VALIDATE} with ${qualifiedSchematronName} output found in ${reportName}"
 
+    # shellcheck disable=2086
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${reportName}" \
         -s:"${DOC_TO_VALIDATE}" \
         target/"${schematronRoot}".xsl \
-        "$SAXON_OPTS"
+        $SAXON_OPTS
 
+    # shellcheck disable=2086
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${htmlReportName}" \
         -s:"${reportName}"  \
         lib/svrl2html.xsl \
-        "$SAXON_OPTS"
+        $SAXON_OPTS
 
 done
