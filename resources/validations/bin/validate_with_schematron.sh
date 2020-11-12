@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 set -o pipefail
 
+usage() {
+    if test -n "$1"; then
+        echo "$1"
+        echo
+    fi
+    echo "Usage: validate_with_schematron.sh [-s directoryName|-o reportDirectory|-v saxonVersionNumber|-h] -f file"
+    echo
+    echo "  -f    fileName               the input file to be tested."
+    echo "  -s    directoryName          schematron directory containing .sch files used to validate"
+    echo "  -o    rootDirectory          is an the root of the report output."
+    echo "  -v    saxonVersionNumber     if you wish to override the default version to be downloaded"
+    echo "  -h                           display this help message"
+}
+
 # output root defaults to report folder relative to this script
 OUTPUT_ROOT="report/schematron"
 # schematron directory validate the file with each .sch found defaults to src/*.sch relative to this script
@@ -34,6 +48,11 @@ while echo "$1" | grep -- ^- > /dev/null 2>&1; do
         -o)
             shift
             OUTPUT_ROOT="$1"
+            ;;
+        # Help!
+        -h)
+            usage
+            exit 0
             ;;
         # Unknown option!
         -*)
