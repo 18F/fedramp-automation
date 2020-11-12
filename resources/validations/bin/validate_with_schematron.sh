@@ -99,6 +99,22 @@ else
     exit 1
 fi
 
+
+if test -f "${SAXON_CP}" ; then
+    java -cp "${SAXON_CP}" net.sf.saxon.Transform -?
+    retval=$?
+    echo retVal: $retval
+    if  test $retval -eq 0 ; then
+        echo Saxon JAR at classpath "${SAXON_CP}" is valid
+    else
+        echo Saxon JAR at classpath "${SAXON_CP}" does not contain net.sf.saxon.Transform
+        exit 1
+    fi
+else 
+    echo Saxon JAR at classpath "${SAXON_CP}" is not present 
+    exit 1
+fi
+
 # Delete pre-existing SVRL report
 rm -rf "${OUTPUT_ROOT}/report/schematron/*.results.xml"
 rm -rf "${OUTPUT_ROOT}/report/schematron/*.results.html"
