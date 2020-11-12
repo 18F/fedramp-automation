@@ -22,13 +22,13 @@ if you haven't done it previously: to add the needed dependencies (declared by .
 
 `-f` *\<required>* is the input file to be tested. ex: `-f test/demo/FedRAMP-SSP-OSCAL-Template.xml`
 
-`-s` *\<optional>* schematron directory used to validate the file. Each .sch found will be compliled and generate a separate report. defaults to src/*.sch relative to this script.  ex: `-o ~/mySchematronDirectory`
+`-s` *\<optional>* schematron directory used to validate the file. Each .sch found within the specified directory will be compliled and generate a separate report. defaults to src relative to this script.  ex: `-o ~/mySchematronDirectory`
 
 `-o` *\<optional>* is an the root of the report output. ex: `-o ~/dev`
 
-`-v` *\<optional>* if you wish to override the default version (currently 10.2) of `SAXON HE`, that is downloaded and used if $SAXON_CP is not specified. ex:  `-v 10.2.2`
+`-v` *\<optional>* if you wish to override the default version (currently 10.2) of `SAXON HE`, that is downloaded and used if $SAXON_CP is not specified. ex:  `-v 10.2.2` *Note,  SAXON_CP is set as an Environment Variable. and `-v` is specified, the script will terminate due to inability to determine priority.*
 
-example
+example:
 
 `./bin/validate_with_schematron.sh -f test/demo/FedRAMP-SSP-OSCAL-Template.xml -o ~/dev -v 10.2.2`
 
