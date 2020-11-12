@@ -78,7 +78,7 @@ else
 fi
 
 # Delete pre-existing XSLT report
-rm -rf target/*.xsl;
+rm -rf "${LIB_DIR}"/*.xsl;
 
 #if version not specified default
 SAXON_VERSION=${SAXON_VERSION:-10.2}
@@ -135,12 +135,12 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     # Use Saxon XSL transform to convert our Schematron to pure XSL 2.0 stylesheet
     # shellcheck disable=2086
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
-        -o:target/"${schematronRoot}".xsl \
+        -o:${LIB_DIR}/"${schematronRoot}".xsl \
         -s:"${qualifiedSchematronName}" \
         "${LIB_DIR}"/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
         $SAXON_OPTS
 
-    echo "compiling: ${qualifiedSchematronName} to: target/${schematronRoot}.xsl"
+    echo "compiling: ${qualifiedSchematronName} to: ${LIB_DIR}/${schematronRoot}.xsl"
    
     # Use Saxon XSL transform to use XSL-ified Schematron rules to analyze full FedRAMP-SSP-OSCAL template
     # and dump the result into reports.
@@ -155,7 +155,7 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${reportName}" \
         -s:"${DOC_TO_VALIDATE}" \
-        target/"${schematronRoot}".xsl \
+        ${LIB_DIR}/"${schematronRoot}".xsl \
         $SAXON_OPTS
 
     # shellcheck disable=2086
