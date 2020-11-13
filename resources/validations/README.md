@@ -26,7 +26,9 @@ if you haven't done it previously: to add the needed dependencies (declared by .
 
 `-o` *\<optional>* is the root directory of the report output. ex: `-o ~/dev`
 
-`-l` *\<optional>* is a directory to install any libraries that may be needed defaults to lib relative to the parent of the bin directory where this script is located. ex: `-o ~/dev`
+`-l` *\<optional>* is a directory to install any libraries that may be needed. Defaults to lib relative to the parent of the bin directory where this script is located. ex: `-l /tmp/lib`
+
+`-t` *\<optional>* is a directory for any 'compiled' artifact that are created. Defaults to target relative to the parent of the bin directory where this script is located. ex: `-t /tmp/target`
 
 `-v` *\<optional>* if you wish to override the default version (currently 10.2) of `SAXON HE`, that is downloaded and used if $SAXON_CP is not specified. ex:  `-v 10.2.2` *Note,  SAXON_CP is set as an Environment Variable. and `-v` is specified, the script will terminate due to inability to determine priority.*
 
