@@ -47,5 +47,5 @@ jobs:
           bash -xv ${{ github.workspace }}/resources/validations/bin/validate_with_schematron.sh \
           -f ${{ github.workspace }}${{ github.event.inputs.DOC_TO_VALIDATE }}  \
           -s ${{ github.workspace }}${{ github.event.inputs.schematronFileName }} \
-          -b ${{ github.workspace }} \
+          -b ${{ github.workspace }}/resources/validations \
           -o /tmp/report
