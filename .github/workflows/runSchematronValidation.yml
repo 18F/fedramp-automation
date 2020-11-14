@@ -55,6 +55,6 @@ jobs:
         with:
           name: fedramp-automation-validation-reports-${{ github.sha }}
           path: |
-            /tmp/report**/*.xml
-            /tmp/report**/*.html
+            /tmp/report/**/*.xml
+            /tmp/report/**/*.html
           if-no-files-found: error
