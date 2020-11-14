@@ -6,11 +6,11 @@ usage() {
         echo "$1"
         echo
     fi
-    echo "Usage: validate_with_schematron.sh [-s directoryName|-o reportDirectory|-l libInstallDirectory|-v saxonVersionNumber|-h] -f file"
+    echo "Usage: validate_with_schematron.sh [-s directoryName|-o outputRootDirectory|-b baseDirectory|-v saxonVersionNumber|-h] -f file"
     echo
     echo "  -f    fileName               the input file to be tested."
     echo "  -s    directoryName          schematron directory containing .sch files used to validate"
-    echo "  -o    rootDirectory          is an the root of the report output."
+    echo "  -o    outputRootDirectory          is an the root of the report output."
     echo "  -v    saxonVersionNumber     if you wish to override the default version to be downloaded"
     echo "  -b    baseDirectory          if you need to override the default base directory (.) for the project"
     echo "  -h                           display this help message"
@@ -71,7 +71,7 @@ done
 
 echo output dir "${OUTPUT_ROOT}"
 if test ! -e  "$DOC_TO_VALIDATE" ; then
-    echo "no file input for report, exiting"
+    echo "no file input to validate, exiting"
     exit 1
 else 
     echo "doc requested to be validated: ${DOC_TO_VALIDATE}"
@@ -84,7 +84,7 @@ BASE_DIR="${BASE_DIR:-.}"
 
 echo "using saxon version ${SAXON_VERSION}"
 
-# Delete pre-existing XSLT report
+# Delete pre-existing compiled XSLT
 rm -rf "${BASE_DIR}"/target/*.xsl;
 
 saxonLocation=saxon/Saxon-HE/"${SAXON_VERSION}"/Saxon-HE-"${SAXON_VERSION}".jar
@@ -120,8 +120,8 @@ else
 fi
 
 # Delete pre-existing SVRL report
-rm -rf "${OUTPUT_ROOT}/report/schematron/*.results.xml"
-rm -rf "${OUTPUT_ROOT}/report/schematron/*.results.html"
+rm -rf "${OUTPUT_ROOT}/*.results.xml"
+rm -rf "${OUTPUT_ROOT}/*.results.html"
 
 #in the future replace the for loop with an optional passed in directory or single schema file -f 
 for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
