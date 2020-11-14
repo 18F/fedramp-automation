@@ -49,3 +49,12 @@ jobs:
           -s ${{ github.workspace }}${{ github.event.inputs.schematronFileName }} \
           -b ${{ github.workspace }}/resources/validations \
           -o /tmp/report
+
+      - name: Upload Resulting Schematron SVRL Report
+        uses: actions/upload-artifact@27bce4eee761b5bc643f46a8dfb41b430c8d05f6
+        with:
+          name: fedramp-automation-validation-reports-${{ github.sha }}
+          path: |
+            /tmp/report**/*.xml
+            /tmp/report**/*.html
+          if-no-files-found: error
