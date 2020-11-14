@@ -12,8 +12,7 @@ usage() {
     echo "  -s    directoryName          schematron directory containing .sch files used to validate"
     echo "  -o    rootDirectory          is an the root of the report output."
     echo "  -v    saxonVersionNumber     if you wish to override the default version to be downloaded"
-    echo "  -l    libInstallDirectory    if you wish to override the default install location for libraries (if needed)"
-    echo "  -t    targetDirectory        if you wish to override the default location for 'compiled' artifacts (if needed)"
+    echo "  -b    baseDirectory          if you need to override the default base directory (.) for the project"
     echo "  -h                           display this help message"
 }
 
@@ -51,15 +50,10 @@ while echo "$1" | grep -- ^- > /dev/null 2>&1; do
             shift
             OUTPUT_ROOT="$1"
             ;;
-        # lib directory root
-        -l)
+        # base directory root
+        -b)
             shift
-            LIB_DIR="$1"
-            ;;
-        # target directory root
-        -t)
-            shift
-            TARGET_DIR="$1"
+            BASE_DIR="$1"
             ;;
         # Help!
         -h)
@@ -85,19 +79,13 @@ fi
 
 #if version not specified default
 SAXON_VERSION=${SAXON_VERSION:-10.2}
-#if lib dir not specified default to relative to project
-LIB_DIR=${LIB_DIR:-lib}
-TARGET_DIR=${TARGET_DIR:-target}
 SAXON_OPTS="${SAXON_OPTS:-allow-foreign=true}"
-
-if ! test -f "${TARGET_DIR}" ; then
-    mkdir -p "${TARGET_DIR}"
-fi
+BASE_DIR="${BASE_DIR:-.}"
 
 echo "using saxon version ${SAXON_VERSION}"
 
 # Delete pre-existing XSLT report
-rm -rf "${TARGET_DIR}"/*.xsl;
+rm -rf "${BASE_DIR}"/target/*.xsl;
 
 saxonLocation=saxon/Saxon-HE/"${SAXON_VERSION}"/Saxon-HE-"${SAXON_VERSION}".jar
 if test -n "$SAXON_CP" ; then
@@ -110,7 +98,7 @@ elif command -v mvn &> /dev/null ;then
         -Dversion="${SAXON_VERSION}"
     SAXON_CP=~/.m2/repository/net/sf/${saxonLocation}
 elif command -v curl &> /dev/null; then
-    SAXON_CP="${LIB_DIR}"/Saxon-HE-"${SAXON_VERSION}".jar
+    SAXON_CP="${BASE_DIR}"/lib/Saxon-HE-"${SAXON_VERSION}".jar
     curl -H "Accept: application/zip" -o "${SAXON_CP}" https://repo1.maven.org/maven2/net/sf/"${saxonLocation}" &> /dev/null
 else
     echo "SAXON_CP environment variable is not set. mvn or curl is required to download dependencies, neither found, please install one and retry"
@@ -146,12 +134,12 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     # Use Saxon XSL transform to convert our Schematron to pure XSL 2.0 stylesheet
     # shellcheck disable=2086
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
-        -o:${TARGET_DIR}/"${schematronRoot}".xsl \
+        -o:"${BASE_DIR}"/target/"${schematronRoot}".xsl \
         -s:"${qualifiedSchematronName}" \
-        lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
+        "${BASE_DIR}"/lib/schematron/trunk/schematron/code/iso_svrl_for_xslt2.xsl \
         $SAXON_OPTS
 
-    echo "compiling: ${qualifiedSchematronName} to: ${TARGET_DIR}/${schematronRoot}.xsl"
+    echo "compiling: ${qualifiedSchematronName} to: ${BASE_DIR}/target/${schematronRoot}.xsl"
    
     # Use Saxon XSL transform to use XSL-ified Schematron rules to analyze full FedRAMP-SSP-OSCAL template
     # and dump the result into reports.
@@ -166,14 +154,14 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${reportName}" \
         -s:"${DOC_TO_VALIDATE}" \
-        ${TARGET_DIR}/"${schematronRoot}".xsl \
+        "${BASE_DIR}"/target/"${schematronRoot}".xsl \
         $SAXON_OPTS
 
     # shellcheck disable=2086
     java -cp "${SAXON_CP}" net.sf.saxon.Transform \
         -o:"${htmlReportName}" \
         -s:"${reportName}"  \
-        lib/svrl2html.xsl \
+        "${BASE_DIR}"/lib/svrl2html.xsl \
         $SAXON_OPTS
 
 done
