@@ -113,7 +113,7 @@
     </x:scenario>
     <x:scenario label="For FedRAMP Automation helper functions">
         <x:scenario label="with lv:registry">
-            <x:scenario label="when a valid path is provided">
+            <x:scenario label="when a valid filesystem path is provided">
                 <x:call function="lv:registry">
                     <!-- 
                         We filter in this test on one file, not all, because
@@ -132,7 +132,7 @@
                     label="the function will return a non-empty collection of information types, threats, and values"
                     test="count(//f:value-set) > 0"/>
             </x:scenario>
-            <x:scenario label="when an invalid path is provided">
+            <x:scenario label="when an invalid filesystem path is provided">
                 <x:call function="lv:registry">
                     <x:param select="'../../xml?select=*.willnotwork'"/>
                  </x:call>
@@ -143,9 +143,34 @@
                             count(//f:value-set) = 0"/>
             </x:scenario>
         </x:scenario>
+        <x:scenario label="with lv:sensitivity-level">
+            <x:scenario label="when a properly formed OSCAL SSP context is provided">
+                <x:call function="lv:sensitivity-level">
+                    <x:param>
+                        <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <system-characteristics>
+                                <security-sensitivity-level>high</security-sensitivity-level>
+                            </system-characteristics>
+                        </system-security-plan>
+                    </x:param>
+                 </x:call>
+                 <x:expect 
+                    label="the function will return the Security Sensitivity Level as text."
+                    select="'high'"/>
+            </x:scenario>
+            <x:scenario label="when an improperly formed OSCAL SSP context is provided">
+                <x:call function="lv:sensitivity-level">
+                    <x:param>
+                        <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <!-- No sensitivity-level in the system-characteristics node -->
+                            <system-characteristics/>
+                        </system-security-plan>
+                    </x:param>
+                </x:call>
+                <x:expect 
+                    label="the function will return an empty string to invalidate subsequent validation."
+                    select="''"/>
+            </x:scenario>
+        </x:scenario>
     </x:scenario>
 </x:description>
-
-                            <!-- count($x:result/content-wrap/f:information-types/f:information-type) > 0 and 
-                            count($x:result/content-wrap/f:fedramp-threats/f:threats/f:threat) > 0 and
-                            count($x:result/content-wrap/f:fedramp-values/f:value-set) > 0"/> -->
