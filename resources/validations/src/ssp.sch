@@ -14,15 +14,51 @@
 
 <xsl:param name="registry-href" select="'../../xml?select=*.xml'"/>
 
-<xsl:function name="lv:if-empty-default" as="item()">
-    <xsl:param name="node" as="node()*"/>
-    <xsl:param name="default" as="xs:anyAtomicType"/>
+<xsl:function name="lv:if-empty-default">
+    <xsl:param name="item"/>
+    <xsl:param name="default"/>
     <xsl:choose>
-        <xsl:when test="not(exists($node)) or normalize-space($node)=''">
-            <xsl:value-of select="$default"/>
+        <!-- Atomic types, integers, strings, et cetera. -->
+        <xsl:when test="$item instance of xs:untypedAtomic or
+                        $item instance of xs:anyURI or
+                        $item instance of xs:string or
+                        $item instance of xs:QName or
+                        $item instance of xs:boolean or
+                        $item instance of xs:base64Binary or
+                        $item instance of xs:hexBinary or
+                        $item instance of xs:integer or
+                        $item instance of xs:decimal or
+                        $item instance of xs:float or
+                        $item instance of xs:double or
+                        $item instance of xs:date or
+                        $item instance of xs:time or
+                        $item instance of xs:dateTime or
+                        $item instance of xs:dayTimeDuration or
+                        $item instance of xs:yearMonthDuration or
+                        $item instance of xs:duration or
+                        $item instance of xs:gMonth or
+                        $item instance of xs:gYear or
+                        $item instance of xs:gYearMonth or
+                        $item instance of xs:gDay or
+                        $item instance of xs:gMonthDay">
+            <xsl:value-of select="if ($item => empty()) then $default else $item"/>
+        </xsl:when>
+        <!-- Any node-kind that can be a sequence type -->
+        <xsl:when test="$item instance of element() or
+                        $item instance of attribute() or
+                        $item instance of text() or
+                        $item instance of document-node() or
+                        $item instance of comment() or
+                        $item instance of processing-instruction()">
+            <xsl:sequence  select="if ($item => normalize-space() => empty()) then $default else $item"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="$node"/>
+            <!-- 
+                If no suitable type found, return empty sequence, as that can
+                be falsey and cast to empty string or checked for `not(exist(.))`
+                later.
+             -->
+            <xsl:sequence select="()"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:function>
@@ -44,9 +80,9 @@
     </xsl:choose>
 </xsl:function>
 
-<xsl:function name="lv:sensitivity-level" as="element()*">
-    <xsl:param name="context" as="item()*"/>
-    <xsl:sequence select="$context//o:security-sensitivity-level"/>
+<xsl:function name="lv:sensitivity-level" as="xs:string">
+    <xsl:param name="context" as="node()*"/>
+    <xsl:value-of select="$context//o:security-sensitivity-level"/>
 </xsl:function>
 
 <xsl:function name="lv:profile" as="document-node()*">
