@@ -244,5 +244,36 @@
                     select="''"/>
             </x:scenario>
         </x:scenario>
+        <x:scenario label="with lv:correct">
+            <x:scenario label="when performing corrections on a valid value from an official value set">
+                <x:call function="lv:correct">
+                    <x:param>
+                        <value-set xmlns="https://fedramp.gov/ns/oscal" name="test">
+                            <allowed-values allow-other="no">
+                               <enum value="a" short-label="Answer A">Approved Answer A</enum>
+                               <enum value="b" short-label="Answer B">Approved Answer B</enum>
+                            </allowed-values>
+                         </value-set>
+                    </x:param>
+                    <x:param>a</x:param>
+                    </x:call>   
+                    <x:expect label="no corrections will be returned because the value is correct."/>
+            </x:scenario>
+            <x:scenario label="when performing corrections on a valid value from an official value set">
+                <x:call function="lv:correct">
+                    <x:param>
+                        <value-set xmlns="https://fedramp.gov/ns/oscal" name="test">
+                            <allowed-values allow-other="no">
+                               <enum value="a" short-label="Answer A">Approved Answer A</enum>
+                               <enum value="b" short-label="Answer B">Approved Answer B</enum>
+                            </allowed-values>
+                         </value-set>
+                    </x:param>
+                    <x:param>c</x:param>
+                    </x:call>   
+                    <x:expect
+                        label="corrections will be returned because the value is incorrect.">a, b</x:expect>
+            </x:scenario>
+        </x:scenario>
     </x:scenario>
 </x:description>
