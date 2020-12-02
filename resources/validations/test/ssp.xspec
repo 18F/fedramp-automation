@@ -170,6 +170,19 @@
                     </example>
                 </x:expect>
             </x:scenario>
+            <x:scenario label="when an invalid value is supplied with an unknown type (not atom or sequence)">
+                <x:call function="lv:if-empty-default">
+                    <x:param/>
+                    <x:param>
+                        <example>
+                            <item>use the default</item>
+                        </example>
+                    </x:param>
+                </x:call>
+                <x:expect
+                    label="the invalid value will be discarded and an empty sequence returned."
+                    select="()"/>
+            </x:scenario>
         </x:scenario>
         <x:scenario label="with lv:registry">
             <x:scenario label="when a valid filesystem path is provided">
