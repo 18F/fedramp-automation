@@ -155,8 +155,9 @@
             </x:scenario>
             <x:scenario label="when an invalid node value is supplied">
                 <x:call function="lv:if-empty-default">
-                    <x:param/>
+                    <x:param>
                         <example/>
+                    </x:param>
                     <x:param>
                         <example>
                             <item>use the default</item>

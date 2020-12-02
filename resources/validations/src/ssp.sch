@@ -51,8 +51,7 @@
                         $item instance of document-node() or
                         $item instance of comment() or
                         $item instance of processing-instruction()">
-            <xsl:message expand-text="yes">sequence normalized: '{$item => count()}';</xsl:message>
-            <xsl:sequence  select="if ($item => normalize-space() => empty()) then $default else $item"/>
+            <xsl:sequence  select="if ($item => normalize-space() => not()) then $default else $item"/>
         </xsl:when>
         <xsl:otherwise>
             <!-- 
@@ -60,8 +59,7 @@
                 be falsey and cast to empty string or checked for `not(exist(.))`
                 later.
              -->
-             <xsl:message expand-text="yes">unknown normalized: '{$item => count()}';</xsl:message>
-            <xsl:sequence select="$default"/>
+            <xsl:sequence select="()"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:function>
