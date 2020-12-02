@@ -41,15 +41,17 @@
                         $item instance of xs:gYearMonth or
                         $item instance of xs:gDay or
                         $item instance of xs:gMonthDay">
-            <xsl:value-of select="if ($item => empty()) then $default else $item"/>
+            <xsl:value-of select="if ($item => string() => normalize-space() = '') then $default else $item"/>
         </xsl:when>
         <!-- Any node-kind that can be a sequence type -->
         <xsl:when test="$item instance of element() or
                         $item instance of attribute() or
                         $item instance of text() or
+                        $item instance of node() or
                         $item instance of document-node() or
                         $item instance of comment() or
                         $item instance of processing-instruction()">
+            <xsl:message expand-text="yes">sequence normalized: '{$item => count()}';</xsl:message>
             <xsl:sequence  select="if ($item => normalize-space() => empty()) then $default else $item"/>
         </xsl:when>
         <xsl:otherwise>
@@ -58,7 +60,8 @@
                 be falsey and cast to empty string or checked for `not(exist(.))`
                 later.
              -->
-            <xsl:sequence select="()"/>
+             <xsl:message expand-text="yes">unknown normalized: '{$item => count()}';</xsl:message>
+            <xsl:sequence select="$default"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:function>

@@ -1,5 +1,6 @@
 <x:description 
     xmlns:x="http://www.jenitennison.com/xslt/xspec"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:o="http://csrc.nist.gov/ns/oscal/1.0"
     xmlns:oscal="http://csrc.nist.gov/ns/oscal/1.0"
@@ -112,6 +113,63 @@
         </x:scenario>
     </x:scenario>
     <x:scenario label="For FedRAMP Automation helper functions">
+        <x:scenario label="with if-empty-default">
+            <x:scenario label="when a valid atom value like a string is supplied">
+                <x:call function="lv:if-empty-default">
+                    <x:param select="'use this'"/>
+                    <x:param select="'ignore this default'"/>
+                </x:call>
+                <x:expect 
+                    label="the valid atom will be used and the optional default discarded."
+                    test="$x:result => string()"
+                    select="'use this'"/>
+            </x:scenario>
+            <x:scenario label="when an valid atom value like a string is supplied">
+                <x:call function="lv:if-empty-default">
+                    <x:param select="''"/>
+                    <x:param select="'use the default'"/>
+                </x:call>
+                <x:expect 
+                    label="the invalid atom will be discarded and the optional default used."
+                    test="$x:result => string()"
+                    select="'use the default'"/>
+            </x:scenario>
+            <x:scenario label="when a valid node value is supplied">
+                <x:call function="lv:if-empty-default">
+                    <x:param>
+                        <example>
+                            <item>valid</item>
+                        </example>
+                    </x:param>
+                    <x:param>
+                        <example>
+                            <item>default</item>
+                        </example>
+                    </x:param>
+                </x:call>
+                <x:expect label="the valid node will be used and the optional default discarded.">
+                    <example>
+                        <item>valid</item>
+                    </example>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="when an invalid node value is supplied">
+                <x:call function="lv:if-empty-default">
+                    <x:param/>
+                        <example/>
+                    <x:param>
+                        <example>
+                            <item>use the default</item>
+                        </example>
+                    </x:param>
+                </x:call>
+                <x:expect label="the invalid node will be discarded and the optional default node used.">
+                    <example>
+                        <item>use the default</item>
+                    </example>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
         <x:scenario label="with lv:registry">
             <x:scenario label="when a valid filesystem path is provided">
                 <x:call function="lv:registry">
