@@ -138,8 +138,8 @@
                 <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                     <system-characteristics>
                         <!--
-                            NOTE: At this time, 800-53 control AC-1 is not required
-                            for the FedRAMP LOW profile. It is required for the FedRAMP
+                            NOTE: At this time, 800-53 control AC-1 is required for
+                            the FedRAMP LOW profile. It is required for the FedRAMP
                             HIGH profile, so this is extraneous.
                         -->
                         <security-sensitivity-level>low</security-sensitivity-level>
