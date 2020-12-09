@@ -108,7 +108,7 @@
                         </control-implementation>
                     </system-security-plan>
                 </x:context>
-                <x:expect-assert id="incomplete-all-implementation-requirements" label="it is invalid."/>
+                <x:expect-assert id="incomplete-all-implemented-requirements" label="it is invalid."/>
             </x:scenario>
         </x:scenario>
         <x:scenario label="when an extraneous control not required by the profile is implemented">
