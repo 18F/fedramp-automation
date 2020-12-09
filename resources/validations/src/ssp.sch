@@ -211,6 +211,7 @@
 
     <sch:rule context="/o:system-security-plan/o:control-implementation">
     <sch:let name="registry" value="$registry-href => lv:registry()"/>
+        <sch:let name="registry-namespace" value="$registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
         <sch:let name="sensitivity-level" value="/ => lv:sensitivity-level()"/>
         <sch:let name="ok-values" value="$registry/f:fedramp-values/f:value-set[@name='control-implementation-status']"/>
         <sch:let name="selected-profile" value="$sensitivity-level => lv:profile()"/>
