@@ -216,10 +216,9 @@
         <sch:let name="ok-values" value="$registry/f:fedramp-values/f:value-set[@name='control-implementation-status']"/>
         <sch:let name="selected-profile" value="$sensitivity-level => lv:profile()"/>
         <sch:let name="required-controls" value="$selected-profile/*//o:control"/>
-        <sch:let name="core-controls" value="$required-controls[o:prop[@name='CORE' and @ns=$registry-namespace]]"/>
         <sch:let name="implemented" value="o:implemented-requirement"/>
         <sch:let name="all-missing" value="$required-controls[not(@id = $implemented/@control-id)]"/>
-        <sch:let name="core-missing" value="$core-controls[not(@id = $implemented/@control-id)]"/>
+        <sch:let name="core-missing" value="$required-controls[o:prop[@name='CORE' and @ns=$registry-namespace] and not(@id = $implemented/@control-id)]"/>
         <sch:let name="extraneous" value="$implemented[not(@control-id = $required-controls/@id)]"/>
         <sch:report id="each-required-control-report" test="count($required-controls) > 0">The following <sch:value-of select="count($required-controls)"/><sch:value-of select="if (count($required-controls)=1) then ' control' else ' controls'"/> are required: <sch:value-of select="$required-controls/@id"/></sch:report>
         <sch:assert id="incomplete-core-implementation-requirements" test="not(exists($core-missing))">This SSP has not implemented the most important <sch:value-of select="count($core-missing)"/> core<sch:value-of select="if (count($core-missing)=1) then ' control' else ' controls'"/>: <sch:value-of select="$core-controls/@id"/></sch:assert>
