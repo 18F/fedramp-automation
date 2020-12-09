@@ -233,7 +233,7 @@
         <sch:let name="registry" value="$registry-href => lv:registry()"/>
         <sch:let name="status" value="./o:annotation[@name='implementation-status']/@value"/>
         <sch:let name="corrections" value="lv:correct($registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)"/>
-        <sch:assert id="invalid-implementation-status" test="not(exists($corrections))">Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="./@control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
+        <sch:assert role="error" id="invalid-implementation-status" test="not(exists($corrections))">Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="./@control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
     </sch:rule>
 
 </sch:pattern>
