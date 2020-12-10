@@ -242,9 +242,9 @@
         <sch:let name="components-count" value="./o:by-component => count()"/>
         <sch:let name="remarks" value="./o:remarks => normalize-space()"/>
         <sch:let name="remarks-length" value="$remarks => string-length()"/>
-        <sch:assert role="error" id="incomplete-response-remarks" test="$remarks-length >= $required-length"
+        <sch:assert role="warning" id="incomplete-response-remarks" test="$remarks-length >= $required-length"
             >Response statement remarks for <sch:value-of select="./@statement-id"/> is too short with <sch:value-of select="$remarks-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
-        <sch:assert role="error" id="missing-response-components" test="$components-count >= $required-components-count"
+        <sch:assert role="warning" id="missing-response-components" test="$components-count >= $required-components-count"
             >Response statements for <sch:value-of select="./@statement-id"/> must have at least <sch:value-of select="$required-components-count"/><sch:value-of select="if (count($components-count)=1) then ' component' else ' components'"/> with a description. There are <sch:value-of select="$components-count"/>.</sch:assert>
     </sch:rule>
 
@@ -257,7 +257,7 @@
         <sch:let name="component-ref" value="./@component-uuid"/>
         <sch:assert role="warning" name="invalid-component-match" test="/o:system-security-plan/o:system-implementation/o:component[@uuid = $component-ref] => exists()"
             >Response statment component with UUID '<sch:value-of select="$component-ref"/>' is not in the system implementation inventory, and cannot be used to define a control.</sch:assert>
-        <sch:assert role="error" id="incomplete-response-remarks" test="$remarks-length >= $required-length"
+        <sch:assert role="warning" id="incomplete-response-remarks" test="$remarks-length >= $required-length"
             >Response statement component remarks for <sch:value-of select="./@statement-id"/> is too short with <sch:value-of select="$remarks-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
         <sch:assert role="error" id="incomplete-response-descriptions" test="$description-length >= $required-length"
             >Response statement component description for <sch:value-of select="../@statement-id"/> is too short with <sch:value-of select="$description-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
