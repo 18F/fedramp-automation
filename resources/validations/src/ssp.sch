@@ -248,12 +248,12 @@
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:description">
         <sch:assert role="warning" id="extraneous-response-descriptions" test=". => empty()"
-            >Response statement<sch:value-of select="../@statement-id"/> has a description that were previously allowed, but not recommended. It will soon be syntactically invalid and deprecated.</sch:assert>
+            >Response statement <sch:value-of select="../@statement-id"/> has a description not within a component. That was previously allowed, but not recommended. It will soon be syntactically invalid and deprecated.</sch:assert>
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:remarks">
         <sch:assert role="warning" id="extraneous-response-remarks" test=". => empty()"
-            >Response statement<sch:value-of select="../@statement-id"/> has remarks that were previously allowed, but not recommended. It will soon be syntactically invalid and deprecated.</sch:assert>
+            >Response statement <sch:value-of select="../@statement-id"/> has remarks not within a component. That was previously allowed, but not recommended. It will soon be syntactically invalid and deprecated.</sch:assert>
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component">
@@ -266,6 +266,7 @@
         <sch:let name="required-length" value="20"/>
         <sch:let name="description" value="./o:description => normalize-space()"/>
         <sch:let name="description-length" value="$description => string-length()"/>
+        <sch:report name="debug-component-description" test="$description => exists()">description (length=<sch:value-of select="$description-length"/>): <sch:value-of select="$description"/>;</sch:report>
         <sch:assert role="error" id="incomplete-response-descriptions" test="$description-length >= $required-length"
             >Response statement component description for <sch:value-of select="../../@statement-id"/> is too short with <sch:value-of select="$description-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
     </sch:rule>
@@ -274,6 +275,7 @@
         <sch:let name="required-length" value="20"/>
         <sch:let name="remarks" value=". => normalize-space()"/>
         <sch:let name="remarks-length" value="$remarks => string-length()"/>
+        <sch:report name="debug-component-remarks" test="$remarks => exists()">remarks (length=<sch:value-of select="$remarks-length"/>): <sch:value-of select="$remarks"/>;</sch:report>
         <sch:assert role="warning" id="incomplete-response-remarks" test="$remarks-length >= $required-length"
             >Response statement component remarks for <sch:value-of select="../../@statement-id"/> is too short with <sch:value-of select="$remarks-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
     </sch:rule>
