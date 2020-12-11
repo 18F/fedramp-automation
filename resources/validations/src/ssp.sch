@@ -247,7 +247,7 @@
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:description">
-        <sch:assert role="warning" id="extraneous-response-descriptions" test=". => empty()"
+        <sch:assert role="warning" id="extraneous-response-description" test=". => empty()"
             >Response statement <sch:value-of select="../@statement-id"/> has a description not within a component. That was previously allowed, but not recommended. It will soon be syntactically invalid and deprecated.</sch:assert>
     </sch:rule>
 
