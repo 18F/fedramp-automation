@@ -166,7 +166,7 @@
                             </control-implementation>
                         </system-security-plan>
                     </x:context>
-                    <x:expect-not-assert id="incomplete-response-description" label="it is valid." role="error"/>
+                    <x:expect-not-assert id="incomplete-response-description" label="it is valid."/>
                 </x:scenario>
             </x:scenario>
         </x:scenario>
