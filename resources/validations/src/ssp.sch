@@ -264,7 +264,7 @@
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component/o:description">
         <sch:let name="required-length" value="20"/>
-        <sch:let name="description" value="./o:description => normalize-space()"/>
+        <sch:let name="description" value=". => normalize-space()"/>
         <sch:let name="description-length" value="$description => string-length()"/>
         <sch:report name="debug-component-description" test="$description => exists()">description (length=<sch:value-of select="$description-length"/>): <sch:value-of select="$description"/>;</sch:report>
         <sch:assert role="error" id="incomplete-response-descriptions" test="$description-length >= $required-length"
