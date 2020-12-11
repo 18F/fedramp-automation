@@ -268,8 +268,8 @@
         <sch:let name="required-length" value="20"/>
         <sch:let name="description" value="./o:description => normalize-space()"/>
         <sch:let name="description-length" value="$description => string-length()"/>
-            <sch:assert role="error" id="incomplete-response-descriptions" test="$description-length >= $required-length"
-                >Response statement component description for <sch:value-of select="../../@statement-id"/> is too short with <sch:value-of select="$description-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
+        <sch:assert role="error" id="incomplete-response-descriptions" test="$description-length >= $required-length"
+            >Response statement component description for <sch:value-of select="../../@statement-id"/> is too short with <sch:value-of select="$description-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component/o:remarks">
