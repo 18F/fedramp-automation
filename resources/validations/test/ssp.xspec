@@ -110,43 +110,41 @@
                 </x:context>
                 <x:expect-assert id="incomplete-all-implemented-requirements" label="it is invalid."/>
             </x:scenario>
-            <x:scenario label="and implemented requirements have explanatory statements">
-                <x:scenario label="and the description is defined directly in the statement">
-                    <x:context>
-                        <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <system-characteristics>
-                                <security-sensitivity-level>low</security-sensitivity-level>
-                            </system-characteristics>
-                            <control-implementation>
-                                <implemented-requirement control-id="ac-2" uuid="68aae076-23ce-4620-bf66-32a8da15d696">
-                                    <statement statement-id="ac-2_stmt.a" uuid="8c0b01ec-e20f-4d95-adf7-eddb83a6dddb">
-                                        <description><p>This shouldn not be here.</p></description>
-                                    </statement>
-                                </implemented-requirement>
-                            </control-implementation>
-                        </system-security-plan>
-                    </x:context>
-                    <x:expect-assert id="extraneous-response-description" label="it generates a warning." role="warning"/>
-                    <x:scenario label="and the remarks are defined directly in the statement">
-                        <x:context>
-                            <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                                <system-characteristics>
-                                    <security-sensitivity-level>low</security-sensitivity-level>
-                                </system-characteristics>
-                                <control-implementation>
-                                    <implemented-requirement control-id="ac-2" uuid="4325e92d-e888-42ff-9d49-f5231129c4d3">                                ">
-                                        <statement statement-id="ac-2_stmt.a" uuid="a8419fd8-2666-4851-8191-94d054c9ef1c">                                    ">
-                                            <remarks><p>This shouldn not be here.</p></remarks>
-                                        </statement>
-                                    </implemented-requirement>
-                                </control-implementation>
-                            </system-security-plan>
-                        </x:context>
-                        <x:expect-assert id="extraneous-response-remarks" label="it generates a warning." role="warning"/>
-                    </x:scenario>
-                </x:scenario>
+            <x:scenario label="and implemented requirements have explanatory statement descriptions defined directly in the statement">
+                <x:context>
+                    <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <system-characteristics>
+                            <security-sensitivity-level>low</security-sensitivity-level>
+                        </system-characteristics>
+                        <control-implementation>
+                            <implemented-requirement control-id="ac-2" uuid="68aae076-23ce-4620-bf66-32a8da15d696">
+                                <statement statement-id="ac-2_stmt.a" uuid="8c0b01ec-e20f-4d95-adf7-eddb83a6dddb">
+                                    <description><p>This shouldn not be here.</p></description>
+                                </statement>
+                            </implemented-requirement>
+                        </control-implementation>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-assert id="extraneous-response-description" label="it generates a warning." role="warning"/>
             </x:scenario>
-            <x:scenario label="and implemented requirements properly define explanatory description in a component reference">
+            <x:scenario label="and implemented requirements have explanatory statement remarks defined directly in the statement">
+                <x:context>
+                    <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <system-characteristics>
+                            <security-sensitivity-level>low</security-sensitivity-level>
+                        </system-characteristics>
+                        <control-implementation>
+                            <implemented-requirement control-id="ac-2" uuid="4325e92d-e888-42ff-9d49-f5231129c4d3">                                ">
+                                <statement statement-id="ac-2_stmt.a" uuid="a8419fd8-2666-4851-8191-94d054c9ef1c">                                    ">
+                                    <remarks><p>This shouldn not be here.</p></remarks>
+                                </statement>
+                            </implemented-requirement>
+                        </control-implementation>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-assert id="extraneous-response-remarks" label="it generates a warning." role="warning"/>
+            </x:scenario>
+            <x:scenario label="and implemented requirements have explanatory statement descriptions properly defined in a component reference">
                 <x:scenario label="and it is sufficiently long">
                     <x:context>
                         <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
@@ -190,7 +188,7 @@
                     <x:expect-assert id="incomplete-response-description" label="it is invalid."/>
                 </x:scenario>
             </x:scenario>
-            <x:scenario label="and implemented requirements properly define explanatory remarks in a component reference">
+            <x:scenario label="and implemented requirements have explanatory statement remarks properly defined in a component reference">
                 <x:scenario label="and it is sufficiently long">
                     <x:context>
                         <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
