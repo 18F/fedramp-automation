@@ -146,7 +146,7 @@
                     </x:scenario>
                 </x:scenario>
             </x:scenario>
-            <x:scenario label="and implemented requirements properly define explanatory elements in a component reference">
+            <x:scenario label="and implemented requirements properly define explanatory descriptions in a component reference">
                 <x:scenario label="and it is sufficiently long">
                     <x:context>
                         <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
