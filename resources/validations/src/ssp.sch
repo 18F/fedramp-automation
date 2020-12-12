@@ -259,7 +259,9 @@
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component">
         <sch:let name="component-ref" value="./@component-uuid"/>
         <sch:assert role="warning" id="invalid-component-match" test="/o:system-security-plan/o:system-implementation/o:component[@uuid = $component-ref] => exists()"
-            >Response statment component with UUID '<sch:value-of select="$component-ref"/>' is not in the system implementation inventory, and cannot be used to define a control.</sch:assert>
+            >Response statment <sch:value-of select="../@statement-id"/> with component reference UUID '<sch:value-of select="$component-ref"/>' is not in the system implementation inventory, and cannot be used to define a control.</sch:assert>
+        <sch:assert role="error" id="missing-component-description" test="./o:description => exists()"
+            >Response statement <sch:value-of select="../@statement-id"/> has a component, but that component is missing a required description node.</sch:assert>"
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component/o:description">
