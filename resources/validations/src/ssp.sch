@@ -258,7 +258,7 @@
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component">
         <sch:let name="component-ref" value="./@component-uuid"/>
-        <sch:assert role="warning" name="invalid-component-match" test="/o:system-security-plan/o:system-implementation/o:component[@uuid = $component-ref] => exists()"
+        <sch:assert role="warning" id="invalid-component-match" test="/o:system-security-plan/o:system-implementation/o:component[@uuid = $component-ref] => exists()"
             >Response statment component with UUID '<sch:value-of select="$component-ref"/>' is not in the system implementation inventory, and cannot be used to define a control.</sch:assert>
     </sch:rule>
 
