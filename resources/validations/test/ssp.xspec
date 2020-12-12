@@ -168,6 +168,27 @@
                     </x:context>
                     <x:expect-not-assert id="incomplete-response-description" label="it is valid."/>
                 </x:scenario>
+                <x:scenario label="and it is not sufficiently long">
+                    <x:context>
+                        <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <system-characteristics>
+                                <security-sensitivity-level>low</security-sensitivity-level>
+                            </system-characteristics>
+                            <control-implementation>
+                                <implemented-requirement control-id="ac-2" uuid="68aae076-23ce-4620-bf66-32a8da15d696">
+                                    <statement statement-id="ac-2_stmt.a" uuid="8c0b01ec-e20f-4d95-adf7-eddb83a6dddb">
+                                        <by-component component-uuid="477b6022-01a8-41c8-8085-b4ed8d47d201" uuid="c9bd1f15-2bae-4d20-8d24-0a5eae7240e9">
+                                            <description>
+                                                <p>Too short.</p>
+                                            </description>
+                                        </by-component>
+                                    </statement>
+                                </implemented-requirement>
+                            </control-implementation>
+                        </system-security-plan>
+                    </x:context>
+                    <x:expect-assert id="incomplete-response-description" label="it is invalid."/>
+                </x:scenario>
             </x:scenario>
         </x:scenario>
         <x:scenario label="when the most important core controls are defined">
