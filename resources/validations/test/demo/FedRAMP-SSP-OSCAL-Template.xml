@@ -8,12 +8,12 @@
       <published>2020-07-01T00:00:00.00-04:00</published>
       <last-modified>2020-07-01T00:00:00.00-04:00</last-modified>
       <version>0.0</version>
-      <oscal-version>1.0-Milestone3</oscal-version>
+      <oscal-version>1.0.0-rc1</oscal-version>
       <revisions>
          <revision>
             <published>2019-06-01T00:00:00.00-04:00</published>
             <version>1.0</version>
-            <oscal-version>1.0-Milestone3</oscal-version>
+            <oscal-version>1.0.0-rc1</oscal-version>
             <prop name="party-uuid" ns="https://fedramp.gov/ns/oscal">6b286b5d-8f07-4fa7-8847-1dd0d88f73fb</prop>
             <remarks>
                <p>Initial publication.</p>
@@ -22,7 +22,7 @@
          <revision>
             <published>2020-06-01T00:00:00.00-04:00</published>
             <version>2.0</version>
-            <oscal-version>1.0-Milestone3</oscal-version>
+            <oscal-version>1.0.0-rc1</oscal-version>
             <prop name="party-id" ns="https://fedramp.gov/ns/oscal">csp</prop>
             <remarks>
                <p>Updated for annual assessment.</p>
