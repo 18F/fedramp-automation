@@ -12,6 +12,36 @@
     <x:param name="only-child-elements">false</x:param>
     <x:param name="visit-text">true</x:param>
     <x:scenario label="For an OSCAL FedRAMP SSP">
+        <x:scenario label="when the document metadata should have an OSCAL version number">
+            <x:scenario label="and it is not defined">
+                <x:context>
+                    <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <metadata/>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-assert id="unsupported-oscal-version" label="it is invalid." role="fatal"/>
+            </x:scenario>
+            <x:scenario label="and it is defined with an unsupported OSCAL version">
+                <x:context>
+                    <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <metadata>
+                            <oscal-version>1.0.0-Milestone3</oscal-version>
+                        </metadata>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-assert id="unsupported-oscal-version" label="it is invalid." role="fatal"/>
+            </x:scenario>
+            <x:scenario label="and it is defined with the supported OSCAL version">
+                <x:context>
+                    <system-security-plan xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <metadata>
+                            <oscal-version>1.0.0-rc1</oscal-version>
+                        </metadata>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-not-assert id="unsupported-oscal-version" label="it is valid."/>
+            </x:scenario>
+        </x:scenario>
         <x:scenario label="when the security sensitivity level">
             <x:scenario label="is not defined at all">
                 <x:context>

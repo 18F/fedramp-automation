@@ -213,7 +213,7 @@
             XPST0003  Unexpected token "<numeric-literal>" beyond end of expression
         -->
         <sch:let name="supported-oscal-version" value="'1.0.0-rc1'"/>
-        <sch:assert role="fatal" id="unsupported-oscal-version" test="./o:oscal-version/text() = $supported-oscal-version"
+        <sch:assert role="fatal" id="unsupported-oscal-version" test="./o:oscal-version/text() => lower-case() = $supported-oscal-version"
             >This SSP uses <sch:value-of select="./o:oscal-version"/> but only <sch:value-of select="$supported-oscal-version"/> is supported.</sch:assert>
     </sch:rule>
 
