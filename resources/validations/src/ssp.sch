@@ -202,6 +202,21 @@
 </xsl:template>
 
 <sch:pattern>
+    <sch:rule context="//o:metadata">
+        <!--
+            Beware: if you try to bind the variable $supported-oscal-version to
+            a value that is just a string not a node from the doc, it will be
+            computed as a numeric value with the dash and give errors like this:
+
+            Error in {1.0.0 -} at char 3 in xsl:variable/@select on line 342
+            column 74 of ssp.xsl:
+            XPST0003  Unexpected token "<numeric-literal>" beyond end of expression
+        -->
+        <sch:let name="supported-oscal-version" value="'1.0.0-rc1'"/>
+        <sch:assert role="fatal" id="unsupported-oscal-version" test="./o:oscal-version/text() = $supported-oscal-version"
+            >This SSP uses <sch:value-of select="./o:oscal-version"/> but only <sch:value-of select="$supported-oscal-version"/> is supported.</sch:assert>
+    </sch:rule>
+
     <sch:rule context="/o:system-security-plan">
         <sch:let name="registry" value="$registry-href => lv:registry()"/>
         <sch:let name="ok-values" value="$registry/f:fedramp-values/f:value-set[@name='security-sensitivity-level']"/>
