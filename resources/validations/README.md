@@ -29,7 +29,7 @@
 
 ### Section C: Overall SSP Checks
 
-- [ ]  1a Is the correct SSP Template used?
+- [X]  1a Is the correct SSP Template used?
 - [ ]  1b Is the correct Deployment Model chosen for the system? 
 - [X]  2  Do all controls have at least one implementation status checkbox selected?
 - [X]  3  Are all critical controls implemented?
