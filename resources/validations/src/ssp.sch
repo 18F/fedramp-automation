@@ -226,13 +226,13 @@
         <sch:let name="all-missing" value="$required-controls[not(@id = $implemented/@control-id)]"/>
         <sch:let name="core-missing" value="$required-controls[o:prop[@name='CORE' and @ns=$registry-ns] and @id = $all-missing/@id]"/>
         <sch:let name="extraneous" value="$implemented[not(@control-id = $required-controls/@id)]"/>
-        <sch:report id="each-required-control-report" test="count($required-controls) > 0">The following <sch:value-of select="count($required-controls)"/><sch:value-of select="if (count($required-controls)=1) then ' control' else ' controls'"/> are required: <sch:value-of select="$required-controls/@id"/></sch:report>
+        <sch:report role="positive" id="each-required-control-report" test="count($required-controls) > 0">The following <sch:value-of select="count($required-controls)"/><sch:value-of select="if (count($required-controls)=1) then ' control' else ' controls'"/> are required: <sch:value-of select="$required-controls/@id"/></sch:report>
         <sch:assert role="error" organizational-id="section-c.3" id="incomplete-core-implemented-requirements" test="not(exists($core-missing))">[Section C Check #3] This SSP has not implemented the most important <sch:value-of select="count($core-missing)"/> core<sch:value-of select="if (count($core-missing)=1) then ' control' else ' controls'"/>: <sch:value-of select="$core-missing/@id"/></sch:assert>
         <sch:assert role="warn" organizational-id="section-c.2" id="incomplete-all-implemented-requirements" test="not(exists($all-missing))">[Section C Check #2] This SSP has not implemented <sch:value-of select="count($all-missing)"/><sch:value-of select="if (count($all-missing)=1) then ' control' else ' controls'"/> overall: <sch:value-of select="$all-missing/@id"/></sch:assert>
         <sch:assert role="warn" organizational-id="section-c.2" id="extraneous-implemented-requirements" test="not(exists($extraneous))">[Section C Check #2] This SSP has implemented <sch:value-of select="count($extraneous)"/> extraneous<sch:value-of select="if (count($extraneous)=1) then ' control' else ' controls'"/> not needed given the selected profile: <sch:value-of select="$extraneous/@control-id"/></sch:assert>
         <sch:let name="results" value="$ok-values => lv:analyze(//o:implemented-requirement/o:annotation[@name='implementation-status'])"/>
         <sch:let name="total" value="$results/reports/@count"/>
-        <sch:report id="control-implemented-requirements-stats" test="count($results/errors/error) = 0"><sch:value-of select="$results => lv:report() => normalize-space()"/></sch:report>
+        <sch:report role="positive" id="control-implemented-requirements-stats" test="count($results/errors/error) = 0"><sch:value-of select="$results => lv:report() => normalize-space()"/></sch:report>
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement">
@@ -246,7 +246,7 @@
         <sch:let name="implemented" value="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement"/>
         <sch:let name="missing" value="$required-response-points[not(@id = $implemented/@statement-id)]"/>
         <sch:assert role="error" organizational-id="section-c.2" id="invalid-implementation-status" test="not(exists($corrections))">[Section C Check #2] Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="./@control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
-        <sch:report id="implemented-response-points" test="exists($implemented)"
+        <sch:report role="positive" id="implemented-response-points" test="exists($implemented)"
             >[Section C Check #2] This SSP has implemented a statement for each of the following lettered response points for required controls: <sch:value-of select="$implemented/@statement-id"/>.</sch:report>
         <sch:assert role="error" organizational-id="section-c.2" id="missing-response-points" test="not(exists($missing))"
             >[Section C Check #2] This SSP has not implemented a statement for each of the following lettered response points for required controls: <sch:value-of select="$missing/@id"/>.</sch:assert>
