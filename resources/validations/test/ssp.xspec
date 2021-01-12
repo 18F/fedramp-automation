@@ -910,9 +910,9 @@
                     select="()"/>
             </x:scenario>
         </x:scenario>
-        <x:scenario label="with lv:registry">
+        <x:scenario label="with lv:extension-registry">
             <x:scenario label="when a valid filesystem path is provided">
-                <x:call function="lv:registry">
+                <x:call function="lv:extension-registry">
                     <!-- 
                         We filter in this test on one file, not all, because
                         we can get a collection of files back. So we have a
@@ -931,7 +931,7 @@
                     test="count(//f:value-set) > 0"/>
             </x:scenario>
             <x:scenario label="when an invalid filesystem path is provided">
-                <x:call function="lv:registry">
+                <x:call function="lv:extension-registry">
                     <x:param select="'../../xml?select=*.willnotwork'"/>
                  </x:call>
                  <x:expect
