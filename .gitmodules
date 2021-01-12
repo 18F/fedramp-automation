@@ -2,9 +2,16 @@
 	path = oscal
 	url = https://github.com/usnistgov/OSCAL.git
 	branch = master
+	ignore = untracked
+
 [submodule "resources/validations/test/xspec"]
 	path = resources/validations/lib/xspec
 	url = https://github.com/xspec/xspec.git
+	branch = master
+	ignore = untracked
+
 [submodule "resources/validations/src/schematron"]
 	path = resources/validations/lib/schematron
 	url = https://github.com/schematron/schematron.git
+	branch = master
+	ignore = untracked
