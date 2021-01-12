@@ -64,7 +64,7 @@
     </xsl:choose>
 </xsl:function>
 
-<xsl:function name="lv:registry" as="item()*">
+<xsl:function name="lv:extension-registry" as="item()*">
     <xsl:param name="href"/>
     <xsl:variable name="collection" select="$href => collection()"/>
     <xsl:choose>
@@ -218,7 +218,7 @@
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan">
-        <sch:let name="registry" value="$registry-href => lv:registry()"/>
+        <sch:let name="extension-registry" value="$registry-href => lv:extension-registry()"/>
         <sch:let name="ok-values" value="$registry/f:fedramp-values/f:value-set[@name='security-sensitivity-level']"/>
         <sch:let name="sensitivity-level" value="/ => lv:sensitivity-level() => lv:if-empty-default('')"/>
         <sch:let name="corrections" value="lv:correct($ok-values, $sensitivity-level)"/>
@@ -231,8 +231,8 @@
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation">
-    <sch:let name="registry" value="$registry-href => lv:registry()"/>
-        <sch:let name="registry-ns" value="$registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
+    <sch:let name="extension-registry" value="$registry-href => lv:extension-registry()"/>
+        <sch:let name="extension-registry-ns" value="$registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
         <sch:let name="sensitivity-level" value="/ => lv:sensitivity-level()"/>
         <sch:let name="ok-values" value="$registry/f:fedramp-values/f:value-set[@name='control-implementation-status']"/>
         <sch:let name="selected-profile" value="$sensitivity-level => lv:profile()"/>
@@ -260,8 +260,8 @@
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement">
         <sch:let name="sensitivity-level" value="/ => lv:sensitivity-level() => lv:if-empty-default('')"/>
         <sch:let name="selected-profile" value="$sensitivity-level => lv:profile()"/>
-        <sch:let name="registry" value="$registry-href => lv:registry()"/>
-        <sch:let name="registry-ns" value="$registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
+        <sch:let name="extension-registry" value="$registry-href => lv:extension-registry()"/>
+        <sch:let name="extension-registry-ns" value="$registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
         <sch:let name="status" value="./o:annotation[@name='implementation-status']/@value"/>
         <sch:let name="corrections" value="lv:correct($registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)"/>
         <sch:assert role="error" id="invalid-implementation-status" test="not(exists($corrections))">Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="./@control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
