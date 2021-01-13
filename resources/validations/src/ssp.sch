@@ -143,7 +143,6 @@
             </xsl:sequence>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message expand-text="yes">error</xsl:message>
             <xsl:sequence>
                 <xsl:call-template name="analysis-template">
                     <xsl:with-param name="value-set" select="$value-set"/>
