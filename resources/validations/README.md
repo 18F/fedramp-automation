@@ -46,7 +46,7 @@ This format will allow for reviewers to collaborate and communicate improvements
 - [ ]  4a Are the customer responsibilities clearly identified in the CIS-CRM Tab, as well as the SSP Controls (by checkbox selected and in the implementation description)?  Are the CIS-CRM and SSP controls consistent for customer responsibilities? A sampling of seven controls involving customer roles is reviewed.
 - [ ]  4b Does the Initial Authorizing Agency concur with the CRM (adequacy and clarity of customer responsibilities)?
 - [ ]  5  Does the Roles Table (User Roles and Privileges) sufficiently describe the range of user roles, responsibilities, and access privileges?
-- [ ]  6  In the control summary tables, does the information in the Responsible Role row correctly describe the required entities responsible for fulfilling the control?
+- [X]  6  In the control summary tables, does the information in the Responsible Role row correctly describe the required entities responsible for fulfilling the control? (50% complete, control mapping will complete this work in 18F/fedramp-automation#51)
 - [ ]  7  Is the appropriate Digital Identity Level selected?
 - [ ]  8a Is the authorization boundary explicitly identified in the network diagram?
 - [ ]  8b Does the CSO provide components to run on the client side? 
