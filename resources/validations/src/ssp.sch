@@ -348,8 +348,8 @@
         <sch:let name="extraneous-roles" value="$responsible-parties[not(@role-id = $roles/@id)]"/>
         <sch:let name="extraneous-parties" value="$responsible-parties[not(o:party-uuid = $parties/@uuid)]"/>
 
-        <sch:assert id="incorrect-role-association" test="not(exists($extraneous-roles))">This SSP has defined a responsible party with <sch:value-of select="count($extraneous-roles)"/> <sch:value-of select="if (count($extraneous-roles)=1) then ' role' else ' roles'"/> not defined in the role: <sch:value-of select="$extraneous-roles/@role-id"/></sch:assert>
-        <sch:assert id="incorrect-party-association" test="not(exists($extraneous-parties))">This SSP has defined a responsible party with <sch:value-of select="count($extraneous-parties)"/> <sch:value-of select="if (count($extraneous-parties)=1) then ' party' else ' parties'"/> is not a defined party: <sch:value-of select="$extraneous-parties/o:party-uuid"/></sch:assert>
+        <sch:assert organizational-id="section-c.6" id="incorrect-role-association" test="not(exists($extraneous-roles))">[Section C Check 2] This SSP has defined a responsible party with <sch:value-of select="count($extraneous-roles)"/> <sch:value-of select="if (count($extraneous-roles)=1) then ' role' else ' roles'"/> not defined in the role: <sch:value-of select="$extraneous-roles/@role-id"/></sch:assert>
+        <sch:assert organizational-id="section-c.6" id="incorrect-party-association" test="not(exists($extraneous-parties))">[Section C Check 2] This SSP has defined a responsible party with <sch:value-of select="count($extraneous-parties)"/> <sch:value-of select="if (count($extraneous-parties)=1) then ' party' else ' parties'"/> is not a defined party: <sch:value-of select="$extraneous-parties/o:party-uuid"/></sch:assert>
     </sch:rule>
   </sch:pattern>
 </sch:schema>
