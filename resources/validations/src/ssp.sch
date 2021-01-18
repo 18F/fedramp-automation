@@ -78,6 +78,31 @@
     </xsl:choose>
 </xsl:function>
 
+<xsl:function name="lv:is-core-ns">
+    <xsl:param name="item" as="xs:string"/>
+    <xsl:choose>
+        <xsl:when test="$item = 'http://csrc.nist.gov/ns/oscal' or not($item)">
+            <xsl:value-of select="true()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="false()"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:function>
+
+<xsl:function name="lv:is-extension-ns">
+    <xsl:param name="item" as="xs:string"/>
+    <xsl:param name="extension-ns"/>
+    <xsl:choose>
+        <xsl:when test="$item = $extension-ns">
+            <xsl:value-of select="true()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="false()"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:function>
+
 <xsl:function name="lv:extension-registry" as="item()*">
     <xsl:param name="href"/>
     <xsl:variable name="collection" select="$href => collection()"/>
