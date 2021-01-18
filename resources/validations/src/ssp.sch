@@ -215,7 +215,7 @@
 </xsl:template>
 
 <sch:pattern>
-    <sch:rule context="//o:metadata">
+    <sch:rule context="/o:system-security-plan/o:metadata">
         <!--
             Beware: if you try to bind the variable $supported-oscal-version to
             a value that is just a string not a node from the doc, it will be
@@ -228,6 +228,13 @@
         <sch:let name="supported-oscal-version" value="'1.0.0-rc1'"/>
         <sch:assert role="fatal" id="unsupported-oscal-version" test="./o:oscal-version/text() => lower-case() = $supported-oscal-version"
             >This SSP uses <sch:value-of select="./o:oscal-version"/> but only <sch:value-of select="$supported-oscal-version"/> is supported.</sch:assert>
+        <sch:let name="parties" value="o:party"/> 
+        <sch:let name="roles" value="o:role"/>
+        <sch:let name="responsible-parties" value="./o:responsible-party"/>
+        <sch:let name="extraneous-roles" value="$responsible-parties[not(@role-id = $roles/@id)]"/>
+        <sch:let name="extraneous-parties" value="$responsible-parties[not(o:party-uuid = $parties/@uuid)]"/>
+        <sch:assert organizational-id="section-c.6" id="incorrect-role-association" test="not(exists($extraneous-roles))">[Section C Check 2] This SSP has defined a responsible party with <sch:value-of select="count($extraneous-roles)"/> <sch:value-of select="if (count($extraneous-roles)=1) then ' role' else ' roles'"/> not defined in the role: <sch:value-of select="$extraneous-roles/@role-id"/></sch:assert>
+        <sch:assert organizational-id="section-c.6" id="incorrect-party-association" test="not(exists($extraneous-parties))">[Section C Check 2] This SSP has defined a responsible party with <sch:value-of select="count($extraneous-parties)"/> <sch:value-of select="if (count($extraneous-parties)=1) then ' party' else ' parties'"/> is not a defined party: <sch:value-of select="$extraneous-parties/o:party-uuid"/></sch:assert>
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan">
@@ -368,16 +375,5 @@
             >[Section D Checks] Response statement component remarks for <sch:value-of select="../../@statement-id"/> is too short with <sch:value-of select="$remarks-length"/> characters. It must be <sch:value-of select="$required-length"/> characters long.</sch:assert>
     </sch:rule>
 
- 
-    <sch:rule context="/o:system-security-plan/o:metadata">
-        <sch:let name="parties" value="o:party"/> 
-        <sch:let name="roles" value="o:role"/>
-        <sch:let name="responsible-parties" value="./o:responsible-party"/>
-        <sch:let name="extraneous-roles" value="$responsible-parties[not(@role-id = $roles/@id)]"/>
-        <sch:let name="extraneous-parties" value="$responsible-parties[not(o:party-uuid = $parties/@uuid)]"/>
-
-        <sch:assert organizational-id="section-c.6" id="incorrect-role-association" test="not(exists($extraneous-roles))">[Section C Check 2] This SSP has defined a responsible party with <sch:value-of select="count($extraneous-roles)"/> <sch:value-of select="if (count($extraneous-roles)=1) then ' role' else ' roles'"/> not defined in the role: <sch:value-of select="$extraneous-roles/@role-id"/></sch:assert>
-        <sch:assert organizational-id="section-c.6" id="incorrect-party-association" test="not(exists($extraneous-parties))">[Section C Check 2] This SSP has defined a responsible party with <sch:value-of select="count($extraneous-parties)"/> <sch:value-of select="if (count($extraneous-parties)=1) then ' party' else ' parties'"/> is not a defined party: <sch:value-of select="$extraneous-parties/o:party-uuid"/></sch:assert>
-    </sch:rule>
   </sch:pattern>
 </sch:schema>
