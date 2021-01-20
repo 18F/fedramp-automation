@@ -78,26 +78,30 @@
     </xsl:choose>
 </xsl:function>
 
-<xsl:function name="lv:is-core-ns">
-    <xsl:param name="item" as="xs:string"/>
+<xsl:function name="lv:has-core-ns" as="xs:boolean">
+    <xsl:param name="node" as="node()"/>
     <xsl:choose>
-        <xsl:when test="$item = 'http://csrc.nist.gov/ns/oscal' or not($item)">
+        <xsl:when test="$node/@ns = 'http://csrc.nist.gov/ns/oscal' or not($node/@ns)">
+            <xsl:message expand-text="yes">core-ns? yes</xsl:message>
             <xsl:value-of select="true()"/>
         </xsl:when>
         <xsl:otherwise>
+            <xsl:message expand-text="yes">core-ns? no</xsl:message>
             <xsl:value-of select="false()"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:function>
 
-<xsl:function name="lv:is-extension-ns">
-    <xsl:param name="item" as="xs:string"/>
+<xsl:function name="lv:has-extension-ns" as="xs:boolean">
+    <xsl:param name="node" as="node()"/>
     <xsl:param name="extension-ns"/>
     <xsl:choose>
-        <xsl:when test="$item = $extension-ns">
+        <xsl:when test="$node/@ns = $extension-ns">
+            <xsl:message expand-text="yes">extension-ns? yes</xsl:message>
             <xsl:value-of select="true()"/>
         </xsl:when>
         <xsl:otherwise>
+            <xsl:message expand-text="yes">extension-ns? no</xsl:message>
             <xsl:value-of select="false()"/>
         </xsl:otherwise>
     </xsl:choose>
