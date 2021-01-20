@@ -1002,22 +1002,61 @@
             </x:scenario>
         </x:scenario>
         <x:scenario label="with lv:has-core-ns">
-            <x:scenario label="when node with no explicit @ns attribute is provided">
+            <x:scenario label="when a node with no explicit @ns attribute is provided">
                 <x:call function="lv:has-core-ns">
                     <x:param>
-                        <annotation xmlns="" name="core-ns-test-a" value="test-value-a"/>
+                        <annotation xmlns="http://csrc.nist.gov/ns/oscal/1.0" name="core-ns-test-a" value="test-value-a"/>
                     </x:param>
                 </x:call>
                 <x:expect label="the function returns true" select="true()"/>
             </x:scenario>
+            <x:scenario label="when a node with an explicit @ns attribute is provided that matches the OSCAL default">
+                <x:call function="lv:has-core-ns">
+                    <x:param>
+                        <annotation xmlns="http://csrc.nist.gov/ns/oscal/1.0" name="core-ns-test-a" value="test-value-a" ns="http://csrc.nist.gov/ns/oscal"/>
+                    </x:param>
+                </x:call>
+                <x:expect label="the function returns true" select="true()"/>
+            </x:scenario>
+            <x:scenario label="when a node with an explicit @ns attribute is provided that does not match the OSCAL default">
+                <x:call function="lv:has-core-ns">
+                    <x:param>
+                        <annotation xmlns="http://csrc.nist.gov/ns/oscal/1.0" name="core-ns-test-a" value="test-value-a" ns="https://example.gov/ns/not-oscal"/>
+                    </x:param>
+                </x:call>
+                <x:expect label="the function returns false" select="false()"/>
+            </x:scenario>
         </x:scenario>
         <x:scenario label="with lv:has-extension-ns">
-            <x:scenario label="when node with no explicit @ns attribute is provided">
+            <x:scenario label="when a node with no explicit @ns attribute is provided">
                 <x:call function="lv:has-extension-ns">
                     <x:param>
-                        <annotation xmlns="" name="ext-ns-test-a" value="test-value-a"/>
+                        <annotation xmlns="http://csrc.nist.gov/ns/oscal/1.0" name="ext-ns-test-a" value="test-value-a"/>
                     </x:param>
-                    <x:param select="'https://fedramp.gov/ns/oscal'"/>
+                    <x:param select="'https://example.gov/ns/good'"/>
+                </x:call>
+                <x:expect label="the function returns false" select="false()"/>
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="with lv:has-extension-ns">
+            <x:scenario label="when a node with an explicit @ns attribute does match the extension registry in the SSP">
+                <x:call function="lv:has-extension-ns">
+                    <x:param>
+                        <annotation 
+                            xmlns="http://csrc.nist.gov/ns/oscal/1.0" 
+                            name="ext-ns-test-a" value="test-value-a" 
+                            ns="https://example.gov/ns/good"/>
+                    </x:param>
+                    <x:param select="'https://example.gov/ns/good'"/>
+                </x:call>
+                <x:expect label="the function returns true" select="true()"/>
+            </x:scenario>
+            <x:scenario label="when a node with an explicit @ns attribute does not match the extension registry in the SSP">
+                <x:call function="lv:has-extension-ns">
+                    <x:param>
+                        <annotation xmlns="http://csrc.nist.gov/ns/oscal/1.0" name="ext-ns-test-a" value="test-value-a" ns="https://example.gov/ns/bad"/>
+                    </x:param>
+                    <x:param select="'https://example.gov/ns/good'"/>
                 </x:call>
                 <x:expect label="the function returns false" select="false()"/>
             </x:scenario>
