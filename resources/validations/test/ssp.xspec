@@ -1037,8 +1037,6 @@
                 </x:call>
                 <x:expect label="the function returns false" select="false()"/>
             </x:scenario>
-        </x:scenario>
-        <x:scenario label="with lv:has-extension-ns">
             <x:scenario label="when a node with an explicit @ns attribute does match the extension registry in the SSP">
                 <x:call function="lv:has-extension-ns">
                     <x:param>
