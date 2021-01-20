@@ -1001,6 +1001,27 @@
                         label="corrections will be returned because the value is incorrect.">a, b</x:expect>
             </x:scenario>
         </x:scenario>
+        <x:scenario label="with lv:has-core-ns">
+            <x:scenario label="when node with no explicit @ns attribute is provided">
+                <x:call function="lv:has-core-ns">
+                    <x:param>
+                        <annotation xmlns="" name="core-ns-test-a" value="test-value-a"/>
+                    </x:param>
+                </x:call>
+                <x:expect label="the function returns true" select="true()"/>
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="with lv:has-extension-ns">
+            <x:scenario label="when node with no explicit @ns attribute is provided">
+                <x:call function="lv:has-extension-ns">
+                    <x:param>
+                        <annotation xmlns="" name="ext-ns-test-a" value="test-value-a"/>
+                    </x:param>
+                    <x:param select="'https://fedramp.gov/ns/oscal'"/>
+                </x:call>
+                <x:expect label="the function returns false" select="false()"/>
+            </x:scenario>
+        </x:scenario>
     </x:scenario>
 
 </x:description>
