@@ -80,31 +80,13 @@
 
 <xsl:function name="lv:has-core-ns" as="xs:boolean">
     <xsl:param name="node" as="node()"/>
-    <xsl:choose>
-        <xsl:when test="$node/@ns = 'http://csrc.nist.gov/ns/oscal' or not($node/@ns)">
-            <xsl:message expand-text="yes">core-ns? yes</xsl:message>
-            <xsl:value-of select="true()"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message expand-text="yes">core-ns? no</xsl:message>
-            <xsl:value-of select="false()"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:sequence select="empty($node/@ns) or ($node/@ns = 'http://csrc.nist.gov/ns/oscal')"/>
 </xsl:function>
 
 <xsl:function name="lv:has-extension-ns" as="xs:boolean">
     <xsl:param name="node" as="node()"/>
     <xsl:param name="extension-ns"/>
-    <xsl:choose>
-        <xsl:when test="$node/@ns = $extension-ns">
-            <xsl:message expand-text="yes">extension-ns? yes</xsl:message>
-            <xsl:value-of select="true()"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message expand-text="yes">extension-ns? no</xsl:message>
-            <xsl:value-of select="false()"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:sequence select="$node/@ns = $extension-ns"/>
 </xsl:function>
 
 <xsl:function name="lv:extension-registry" as="item()*">
@@ -306,14 +288,41 @@
             >This SSP has not implemented a statement for each of the following lettered response points for required controls: <sch:value-of select="$missing-response-points/@id"/>.</sch:assert>
     </sch:rule>
 
-    <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement">
+    <sch:rule context="o:annotation[@name='implementation-status']">
         <sch:let name="sensitivity-level" value="/ => lv:sensitivity-level() => lv:if-empty-default('')"/>
         <sch:let name="selected-profile" value="$sensitivity-level => lv:profile()"/>
         <sch:let name="extension-registry" value="$extension-registry-href => lv:extension-registry()"/>
         <sch:let name="extension-registry-ns" value="$extension-registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
-        <sch:let name="status" value="./o:annotation[@name='implementation-status']/@value"/>
+        <sch:let name="status" value="./@value"/>
+        <sch:let name="control-id" value="../@control-id"/>
         <sch:let name="corrections" value="lv:correct($extension-registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)"/>
-        <sch:assert role="error" id="invalid-implementation-status" test="not(exists($corrections))">Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="./@control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
+        <sch:assert role="error" id="invalid-implementation-status" test="not(exists($corrections))">Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="$control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
+    </sch:rule>
+
+    <sch:rule context="o:annotation[. => lv:has-core-ns()][@name='implementation-status']">
+        <sch:let name="sensitivity-level" value="/ => lv:sensitivity-level() => lv:if-empty-default('')"/>
+        <sch:let name="selected-profile" value="$sensitivity-level => lv:profile()"/>
+        <sch:let name="core-registry" value="blah"/>
+        <sch:let name="extension-registry" value="$extension-registry-href => lv:extension-registry()"/>
+        <sch:let name="extension-registry-ns" value="$extension-registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
+        <sch:let name="status" value="./@value"/>
+        <sch:let name="control-id" value="../@control-id"/>
+        <sch:let name="corrections" value=". => lv:has-core-ns() and lv:correct($extension-registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)"/>
+        <!-- <sch:let name="corrections" value=". => lv:has-extension-ns($extension-registry-ns) and lv:correct($extension-registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)"/> -->
+        <sch:assert role="error" id="invalid-implementation-status" test="not(exists($corrections))">Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="$control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
+    </sch:rule>
+
+    <sch:rule context="o:annotation[. => lv:has-extension-ns('https://fedramp.gov/ns/oscal')][@name='implementation-status']">
+        <sch:let name="sensitivity-level" value="/ => lv:sensitivity-level() => lv:if-empty-default('')"/>
+        <sch:let name="selected-profile" value="$sensitivity-level => lv:profile()"/>
+        <sch:let name="core-registry" value="blah"/>
+        <sch:let name="extension-registry" value="$extension-registry-href => lv:extension-registry()"/>
+        <sch:let name="extension-registry-ns" value="$extension-registry/f:fedramp-values/f:namespace/f:ns/@ns"/>
+        <sch:let name="status" value="./@value"/>
+        <sch:let name="control-id" value="../@control-id"/>
+        <sch:let name="corrections" value=". => lv:has-core-ns() and lv:correct($extension-registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)"/>
+        <sch:let name="corrections" value=". => lv:has-extension-ns($extension-registry-ns) and lv:correct($extension-registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)"/>
+        <sch:assert role="error" id="invalid-implementation-status" test="not(exists($corrections))">Invalid status '<sch:value-of select="$status"/>' for <sch:value-of select="$control-id"/>, must be <sch:value-of select="$corrections"/></sch:assert>
     </sch:rule>
 
     <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement">
