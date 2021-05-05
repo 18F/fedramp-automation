@@ -4,7 +4,7 @@
 	branch = master
 	ignore = dirty
 
-[submodule "resources/validations/test/xspec"]
+[submodule "resources/validations/lib/xspec"]
 	path = resources/validations/lib/xspec
 	url = https://github.com/xspec/xspec.git
 	branch = master
