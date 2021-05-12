@@ -2071,6 +2071,7 @@
       <resource uuid="985475ee-d4d6-4581-8fdf-d84d3d8caa48">
          <title>FedRAMP Applicable Laws and Regulations</title>
          <prop name="type" value="fedramp-citations"/>
+         <prop ns="https://fedramp.gov/ns/oscal" name="type" value="fedramp-citations"/>
          <rlink href="https://www.fedramp.gov/assets/resources/templates/SSP-A12-FedRAMP-Laws-and-Regulations-Template.xlsx"/>
          <remarks>
             <p>Must be present in a FedRAMP SSP.</p>
@@ -2079,16 +2080,19 @@
       <resource uuid="1a23a771-d481-4594-9a1a-71d584fa4123">
          <title>FedRAMP Master Acronym and Glossary</title>
          <prop name="type" value="fedramp-acronyms"/>
+         <prop ns="https://fedramp.gov/ns/oscal" name="type" value="fedramp-citations"/>
          <rlink href="https://www.fedramp.gov/assets/resources/documents/FedRAMP_Master_Acronym_and_Glossary.pdf"/>
          <remarks>
             <p>Must be present in a FedRAMP SSP.</p>
          </remarks>
       </resource>
       <resource uuid="a2381e87-3d04-4108-a30b-b4d2f36d001f">
+         <title>FedRAMP Logo</title>
          <description>
             <p>FedRAMP Logo</p>
          </description>
          <prop name="type" value="logo"/>
+         <prop ns="https://fedramp.gov/ns/oscal" name="type" value="fedramp-logo"/>
          <rlink href="https://www.fedramp.gov/assets/img/logo-main-fedramp.png"/>
          <remarks>
             <p>Must be present in a FedRAMP SSP.</p>
@@ -2104,7 +2108,7 @@
       <resource uuid="a8a0cc81-800f-479f-93d3-8b8743d9b98d">
          <title>[SAMPLE]Privacy-Related Law Citation</title>
          <prop name="type" value="law"/>
-         <prop name="type" value="personally-identifiable-information"/>
+         <prop name="type" value="Personal-Identifiable-Information"/>
          <prop name="publication" value="Publication Date"/>
          <document-id scheme="https://www.doi.org/">Identification Number</document-id>
          <rlink href="https://example.com/path/to/document.pdf"/>
@@ -2124,6 +2128,7 @@
          <rlink href="./documents/ISAs/ISA-1.docx"/>
       </resource>
       <resource uuid="31a46c4f-2959-4287-bc1c-67297d7da60b">
+         <title>CSP Logo</title>
          <description>
             <p>CSP Logo</p>
          </description>
@@ -2136,6 +2141,7 @@
          </remarks>
       </resource>
       <resource uuid="2c1747d6-874a-49a2-8488-2fd9735416bf">
+         <title>3PAO Logo</title>
          <description>
             <p>3PAO Logo</p>
          </description>
@@ -2148,6 +2154,7 @@
          </remarks>
       </resource>
       <resource uuid="d2eb3c18-6754-4e3a-a933-03d289e3fad5">
+         <title>Authorization Boundary Diagram</title>
          <description>
             <p>The primary authorization boundary diagram.</p>
          </description>
@@ -2164,6 +2171,7 @@
          </remarks>
       </resource>
       <resource uuid="61081e81-850b-43c1-bf43-1ecbddcb9e7f">
+         <title>Network Diagram</title>
          <description>
             <p>The primary network diagram.</p>
          </description>
@@ -2181,6 +2189,7 @@
          </remarks>
       </resource>
       <resource uuid="ac5d7535-f3b8-45d3-bf3b-735c82c64547">
+         <title>Data Flow Diagram</title>
          <description>
             <p>The primary data flow diagram.</p>
          </description>
@@ -2274,9 +2283,10 @@
       </resource>
       <resource uuid="fab59751-b855-40cb-93c1-492562e20e18">
          <title>Privacy Impact Assessment</title>
-         <prop name="type" value="privacy-impact-assessment"/>
+         <prop name="type" value="pia"/>
          <prop name="publication" value="Document Date"/>
          <prop name="version" value="Document Version"/>
+         
          <rlink href="./documents/pia.docx"
                 media-type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
          <base64 filename="pia.docx"
@@ -2359,7 +2369,8 @@
          <description>
             <p>Separation of Duties Matrix</p>
          </description>
-         <prop name="type" value="separation-of-duties"/>
+         <!--<prop name="type" value="separation-of-duties"/>-->
+         <prop ns="https://fedramp.gov/ns/oscal" name="type" value="separation-of-duties-matrix"></prop>
          <prop name="publication" value="Document Date"/>
          <prop name="version" value="Document Version"/>
          <rlink href="./documents/Sep_Matrix.docx"

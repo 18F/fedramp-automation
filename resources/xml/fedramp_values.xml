@@ -495,7 +495,7 @@
          <enum value="procedure" short-label="Procedure">Procedure</enum>
          <enum value="guide" short-label="Guidance">Guidance Document</enum>
          <enum value="pia" short-label="P.I.A.">Privacy Impact Assessment</enum>
-         <enum value="rob" short-label="R.O.B.">Rules of Behavior</enum>
+         <enum value="rules-of-behavior" short-label="R.O.B.">Rules of Behavior</enum>
          <enum value="plan" short-label="Plan">Plan</enum>
          <enum value="system-security-plan" short-label="SSP">System Security Plan</enum>
          <enum value="artifact" short-label="artifact">Artifact</enum>
@@ -507,6 +507,15 @@
          <enum value="interview-notes" short-label="Notes">Interview Notes</enum>
          <enum value="questionnaire" short-label="Questions">Questions</enum>
          <enum value="report" short-label="Report">Report</enum>
+         <enum value="fedramp-citations" short-label="FR Citations">FedRAMP Citations</enum>
+         <enum value="fedramp-acronyms" short-label="FR Acronyms">FedRAMP Acronyms</enum>
+         <enum value="fedramp-logo" short-label="FR Logo">FedRAMP Logo</enum>
+         <enum value="separation-of-duties-matrix" short-label="SoD Matrix">Separation of Duties Matrix</enum>
+         <enum value="logo" short-label="Logo">Logo</enum>
+         <!-- See, e.g., https://www.dol.gov/general/ppii#:~:text=Personal%20Identifiable%20Information%20(PII)%20is,either%20direct%20or%20indirect%20means. -->
+         <!-- All the privacy "types" need rationalization -->
+         <enum value="Personal-Identifiable-Information" short-label="PII">Personal Identifiable Information (PII)</enum>
+         <enum value="agreement" short-label="Agreement">Agreement</enum>
       </allowed-values>
       <remarkas>Not all values apply to all FedRAMP artifacts.</remarkas>
    </value-set>
