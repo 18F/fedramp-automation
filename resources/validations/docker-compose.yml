@@ -4,6 +4,7 @@ services:
   validator:
     environment:
       - SAXON_CP=lib/Saxon-HE-10.2.jar
+      - TEST_DIR=/root/resources/validations/report/test
     build: .
     volumes:
       - ../..:/root
