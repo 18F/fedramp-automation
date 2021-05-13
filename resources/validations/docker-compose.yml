@@ -2,6 +2,8 @@ version: "3.9"
 
 services:
   validator:
+    environment:
+      - SAXON_CP=lib/Saxon-HE-10.2.jar
     build: .
     volumes:
       - ../..:/root
