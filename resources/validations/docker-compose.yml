@@ -4,4 +4,4 @@ services:
   validator:
     build: .
     volumes:
-      - .:/root
+      - ../..:/root
