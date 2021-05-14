@@ -2080,7 +2080,7 @@
       <resource uuid="1a23a771-d481-4594-9a1a-71d584fa4123">
          <title>FedRAMP Master Acronym and Glossary</title>
          <prop name="type" value="fedramp-acronyms"/>
-         <prop ns="https://fedramp.gov/ns/oscal" name="type" value="fedramp-citations"/>
+         <prop ns="https://fedramp.gov/ns/oscal" name="type" value="fedramp-acronyms"/>
          <rlink href="https://www.fedramp.gov/assets/resources/documents/FedRAMP_Master_Acronym_and_Glossary.pdf"/>
          <remarks>
             <p>Must be present in a FedRAMP SSP.</p>
@@ -2369,7 +2369,7 @@
          <description>
             <p>Separation of Duties Matrix</p>
          </description>
-         <!--<prop name="type" value="separation-of-duties"/>-->
+         <prop name="type" value="separation-of-duties"/>
          <prop ns="https://fedramp.gov/ns/oscal" name="type" value="separation-of-duties-matrix"></prop>
          <prop name="publication" value="Document Date"/>
          <prop name="version" value="Document Version"/>
