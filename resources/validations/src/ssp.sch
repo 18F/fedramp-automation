@@ -1,6 +1,5 @@
 <sch:schema queryBinding="xslt2" xmlns:o="http://csrc.nist.gov/ns/oscal/1.0" xmlns:sch="http://purl.oclc.org/dsdl/schematron" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xpath-default-namespace="http://csrc.nist.gov/ns/oscal/1.0">
     <sch:ns prefix="f" uri="https://fedramp.gov/ns/oscal" />
-    <sch:ns prefix="o" uri="http://csrc.nist.gov/ns/oscal/1.0" />
     <sch:ns prefix="oscal" uri="http://csrc.nist.gov/ns/oscal/1.0" />
     <sch:ns prefix="lv" uri="local-validations" />
     <sch:title>FedRAMP System Security Plan Validations</sch:title>
@@ -77,7 +76,7 @@
     </xsl:function>
     <xsl:function as="xs:string" name="lv:sensitivity-level">
         <xsl:param as="node()*" name="context" />
-        <xsl:value-of select="$context//o:security-sensitivity-level" />
+        <xsl:value-of select="$context//oscal:security-sensitivity-level" />
     </xsl:function>
     <xsl:function as="document-node()*" name="lv:profile">
         <xsl:param name="level" />
@@ -202,7 +201,7 @@
         </xsl:value-of>
     </xsl:template>
     <sch:pattern>
-        <sch:rule context="/o:system-security-plan">
+        <sch:rule context="/oscal:system-security-plan">
             <sch:let name="registry" value="$registry-href =&gt; lv:registry()" />
             <sch:let name="ok-values" value="$registry/f:fedramp-values/f:value-set[@name='security-sensitivity-level']" />
             <sch:let name="sensitivity-level" value="/ =&gt; lv:sensitivity-level() =&gt; lv:if-empty-default('')" />
@@ -224,16 +223,16 @@
                 . No more validation processing can occur.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation">
             <sch:let name="registry" value="$registry-href =&gt; lv:registry()" />
             <sch:let name="registry-ns" value="$registry/f:fedramp-values/f:namespace/f:ns/@ns" />
             <sch:let name="sensitivity-level" value="/ =&gt; lv:sensitivity-level()" />
             <sch:let name="ok-values" value="$registry/f:fedramp-values/f:value-set[@name='control-implementation-status']" />
             <sch:let name="selected-profile" value="$sensitivity-level =&gt; lv:profile()" />
-            <sch:let name="required-controls" value="$selected-profile/*//o:control" />
-            <sch:let name="implemented" value="o:implemented-requirement" />
+            <sch:let name="required-controls" value="$selected-profile/*//oscal:control" />
+            <sch:let name="implemented" value="oscal:implemented-requirement" />
             <sch:let name="all-missing" value="$required-controls[not(@id = $implemented/@control-id)]" />
-            <sch:let name="core-missing" value="$required-controls[o:prop[@name='CORE' and @ns=$registry-ns] and @id = $all-missing/@id]" />
+            <sch:let name="core-missing" value="$required-controls[oscal:prop[@name='CORE' and @ns=$registry-ns] and @id = $all-missing/@id]" />
             <sch:let name="extraneous" value="$implemented[not(@control-id = $required-controls/@id)]" />
             <sch:report id="each-required-control-report" role="positive" test="count($required-controls) &gt; 0">
                 The following
@@ -265,21 +264,21 @@
                 not needed given the selected profile:
                 <sch:value-of select="$extraneous/@control-id" />
             </sch:assert>
-            <sch:let name="results" value="$ok-values =&gt; lv:analyze(//o:implemented-requirement/o:prop[@name='implementation-status'])" />
+            <sch:let name="results" value="$ok-values =&gt; lv:analyze(//oscal:implemented-requirement/oscal:prop[@name='implementation-status'])" />
             <sch:let name="total" value="$results/reports/@count" />
             <sch:report id="control-implemented-requirements-stats" role="positive" test="count($results/errors/error) = 0">
                 <sch:value-of select="$results =&gt; lv:report() =&gt; normalize-space()" />
             </sch:report>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement">
             <sch:let name="sensitivity-level" value="/ =&gt; lv:sensitivity-level() =&gt; lv:if-empty-default('')" />
             <sch:let name="selected-profile" value="$sensitivity-level =&gt; lv:profile()" />
             <sch:let name="registry" value="$registry-href =&gt; lv:registry()" />
             <sch:let name="registry-ns" value="$registry/f:fedramp-values/f:namespace/f:ns/@ns" />
-            <sch:let name="status" value="./o:prop[@name='implementation-status']/@value" />
+            <sch:let name="status" value="./oscal:prop[@name='implementation-status']/@value" />
             <sch:let name="corrections" value="lv:correct($registry/f:fedramp-values/f:value-set[@name='control-implementation-status'], $status)" />
-            <sch:let name="required-response-points" value="$selected-profile/o:catalog//o:part[@name='item']" />
-            <sch:let name="implemented" value="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement" />
+            <sch:let name="required-response-points" value="$selected-profile/oscal:catalog//oscal:part[@name='item']" />
+            <sch:let name="implemented" value="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement" />
             <sch:let name="missing" value="$required-response-points[not(@id = $implemented/@statement-id)]" />
             <sch:assert id="invalid-implementation-status" organizational-id="section-c.2" role="error" test="not(exists($corrections))">
                 [Section C Check 2] Invalid status '
@@ -302,11 +301,11 @@
                 .
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement">
             <sch:let name="required-components-count" value="1" />
             <sch:let name="required-length" value="20" />
-            <sch:let name="components-count" value="./o:by-component =&gt; count()" />
-            <sch:let name="remarks" value="./o:remarks =&gt; normalize-space()" />
+            <sch:let name="components-count" value="./oscal:by-component =&gt; count()" />
+            <sch:let name="remarks" value="./oscal:remarks =&gt; normalize-space()" />
             <sch:let name="remarks-length" value="$remarks =&gt; string-length()" />
             <sch:assert id="missing-response-components" role="warning" test="$components-count &gt;= $required-components-count">
                 Response statements for
@@ -319,7 +318,7 @@
                 .
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:description">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:description">
             <sch:assert id="extraneous-response-description" role="warning" test=". =&gt; empty()">
                 Response statement
                 <sch:value-of select="../@statement-id" />
@@ -327,7 +326,7 @@
             will soon be syntactically invalid and deprecated.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:remarks">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:remarks">
             <sch:assert id="extraneous-response-remarks" role="warning" test=". =&gt; empty()">
                 Response statement
                 <sch:value-of select="../@statement-id" />
@@ -335,9 +334,9 @@
             soon be syntactically invalid and deprecated.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:by-component">
             <sch:let name="component-ref" value="./@component-uuid" />
-            <sch:assert id="invalid-component-match" organizational-id="section-d" role="warning" test="/o:system-security-plan/o:system-implementation/o:component[@uuid = $component-ref] =&gt; exists()">
+            <sch:assert id="invalid-component-match" organizational-id="section-d" role="warning" test="/oscal:system-security-plan/oscal:system-implementation/oscal:component[@uuid = $component-ref] =&gt; exists()">
                 [Section D Checks]
                     Response statment
                 <sch:value-of select="../@statement-id" />
@@ -345,7 +344,7 @@
                 <sch:value-of select="$component-ref" />
                 ' is not in the system implementation inventory, and cannot be used to define a control.
             </sch:assert>
-            <sch:assert id="missing-component-description" organizational-id="section-d" role="error" test="./o:description =&gt; exists()">
+            <sch:assert id="missing-component-description" organizational-id="section-d" role="error" test="./oscal:description =&gt; exists()">
                 [Section D Checks] Response statement
                 <sch:value-of select="../@statement-id" />
                 has a component, but that component is missing a required description
@@ -353,7 +352,7 @@
             </sch:assert>
             "
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component/o:description">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:by-component/oscal:description">
             <sch:let name="required-length" value="20" />
             <sch:let name="description" value=". =&gt; normalize-space()" />
             <sch:let name="description-length" value="$description =&gt; string-length()" />
@@ -367,7 +366,7 @@
                 characters long.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component/o:remarks">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:by-component/oscal:remarks">
             <sch:let name="required-length" value="20" />
             <sch:let name="remarks" value=". =&gt; normalize-space()" />
             <sch:let name="remarks-length" value="$remarks =&gt; string-length()" />
@@ -381,11 +380,11 @@
                 characters long.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement">
             <sch:let name="required-components-count" value="1" />
             <sch:let name="required-length" value="20" />
-            <sch:let name="components-count" value="./o:by-component =&gt; count()" />
-            <sch:let name="remarks" value="./o:remarks =&gt; normalize-space()" />
+            <sch:let name="components-count" value="./oscal:by-component =&gt; count()" />
+            <sch:let name="remarks" value="./oscal:remarks =&gt; normalize-space()" />
             <sch:let name="remarks-length" value="$remarks =&gt; string-length()" />
             <sch:assert id="missing-response-components" organizational-id="section-d" role="warning" test="$components-count &gt;= $required-components-count">
                 [Section D Checks] Response statements for
@@ -398,7 +397,7 @@
                 .
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:description">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:description">
             <sch:assert id="extraneous-response-description" organizational-id="section-d" role="warning" test=". =&gt; empty()">
                 [Section D Checks] Response statement
                 <sch:value-of select="../@statement-id" />
@@ -406,7 +405,7 @@
             will soon be syntactically invalid and deprecated.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:remarks">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:remarks">
             <sch:assert id="extraneous-response-remarks" organizational-id="section-d" role="warning" test=". =&gt; empty()">
                 [Section D Checks] Response statement
                 <sch:value-of select="../@statement-id" />
@@ -414,9 +413,9 @@
             soon be syntactically invalid and deprecated.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:by-component">
             <sch:let name="component-ref" value="./@component-uuid" />
-            <sch:assert id="invalid-component-match" organizational-id="section-d" role="warning" test="/o:system-security-plan/o:system-implementation/o:component[@uuid = $component-ref] =&gt; exists()">
+            <sch:assert id="invalid-component-match" organizational-id="section-d" role="warning" test="/oscal:system-security-plan/oscal:system-implementation/oscal:component[@uuid = $component-ref] =&gt; exists()">
                 [Section D Checks]
                     Response statment
                 <sch:value-of select="../@statement-id" />
@@ -424,7 +423,7 @@
                 <sch:value-of select="$component-ref" />
                 ' is not in the system implementation inventory, and cannot be used to define a control.
             </sch:assert>
-            <sch:assert id="missing-component-description" organizational-id="section-d" role="error" test="./o:description =&gt; exists()">
+            <sch:assert id="missing-component-description" organizational-id="section-d" role="error" test="./oscal:description =&gt; exists()">
                 [Section D Checks] Response statement
                 <sch:value-of select="../@statement-id" />
                 has a component, but that component is missing a required description
@@ -432,7 +431,7 @@
             </sch:assert>
             "
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component/o:description">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:by-component/oscal:description">
             <sch:let name="required-length" value="20" />
             <sch:let name="description" value=". =&gt; normalize-space()" />
             <sch:let name="description-length" value="$description =&gt; string-length()" />
@@ -446,7 +445,7 @@
                 characters long.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement/o:by-component/o:remarks">
+        <sch:rule context="/oscal:system-security-plan/oscal:control-implementation/oscal:implemented-requirement/oscal:statement/oscal:by-component/oscal:remarks">
             <sch:let name="required-length" value="20" />
             <sch:let name="remarks" value=". =&gt; normalize-space()" />
             <sch:let name="remarks-length" value="$remarks =&gt; string-length()" />
@@ -460,12 +459,12 @@
                 characters long.
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:metadata">
-            <sch:let name="parties" value="o:party" />
-            <sch:let name="roles" value="o:role" />
-            <sch:let name="responsible-parties" value="./o:responsible-party" />
+        <sch:rule context="/oscal:system-security-plan/oscal:metadata">
+            <sch:let name="parties" value="oscal:party" />
+            <sch:let name="roles" value="oscal:role" />
+            <sch:let name="responsible-parties" value="./oscal:responsible-party" />
             <sch:let name="extraneous-roles" value="$responsible-parties[not(@role-id = $roles/@id)]" />
-            <sch:let name="extraneous-parties" value="$responsible-parties[not(o:party-uuid = $parties/@uuid)]" />
+            <sch:let name="extraneous-parties" value="$responsible-parties[not(oscal:party-uuid = $parties/@uuid)]" />
             <sch:assert id="incorrect-role-association" organizational-id="section-c.6" test="not(exists($extraneous-roles))">
                 [Section C Check 2] This SSP has defined a responsible party with
                 <sch:value-of select="count($extraneous-roles)" />
@@ -478,19 +477,19 @@
                 <sch:value-of select="count($extraneous-parties)" />
                 <sch:value-of select="if (count($extraneous-parties)=1) then ' party' else ' parties'" />
                 is not a defined party:
-                <sch:value-of select="$extraneous-parties/o:party-uuid" />
+                <sch:value-of select="$extraneous-parties/oscal:party-uuid" />
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:back-matter/o:resource">
+        <sch:rule context="/oscal:system-security-plan/oscal:back-matter/oscal:resource">
             <sch:assert id="resource-uuid-required" organizational-id="section-b.?????" test="./@uuid">[Section B Check ????] This SSP includes back-matter resource missing a UUID</sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:back-matter/o:resource/o:rlink">
+        <sch:rule context="/oscal:system-security-plan/oscal:back-matter/oscal:resource/oscal:rlink">
             <sch:assert id="resource-rlink-required" organizational-id="section-b.?????" test="doc-available(./@href)">
                 [Section B Check ????] This SSP references back-matter resource:
                 <sch:value-of select="./@href" />
             </sch:assert>
         </sch:rule>
-        <sch:rule context="/o:system-security-plan/o:back-matter/o:resource/o:base64">
+        <sch:rule context="/oscal:system-security-plan/oscal:back-matter/oscal:resource/oscal:base64">
             <sch:let name="filename" value="@filename" />
             <sch:let name="media-type" value="@media-type" />
             <sch:assert id="resource-base64-available" organizational-id="section-b.?????" test="./@filename">

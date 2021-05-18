@@ -10,9 +10,11 @@
                         FedRAMP OSCAL SSP must attach the FedRAMP Master Acronym and Glossary</sch:assert>
         <sch:assert id="lacks-fedramp-logo" role="error" test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'fedramp-logo']]">A
                         FedRAMP OSCAL SSP must attach the FedRAMP Master Acronym and Glossary</sch:assert>
+
         <!-- TODO: ensure multiple Policy and Procedure attachments are present -->
         <sch:assert role="error" test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = ('Policy', 'Procedure')]]">
                         A FedRAMP OSCAL SSP must attach Information Security Policies and Procedures</sch:assert>
+
         <!-- Contrast with the "Separation of Duties Matrix" assertion -->
         <sch:assert id="lacks-user-guide" role="error" test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'user-guide']]">A
                         FedRAMP OSCAL SSP must attach a User Guide</sch:assert>

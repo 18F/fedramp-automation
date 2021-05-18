@@ -1,13 +1,13 @@
 <sch:pattern xmlns:sch="http://purl.oclc.org/dsdl/schematron">
     <sch:let name="attachment-types" value="doc('../../xml/fedramp_values.xml')//f:value-set[@name = 'attachment-type']//f:enum/@value" />
-    <sch:rule context="oscal:back-matter">
+    <sch:rule context="/oscal:system-security-plan/oscal:back-matter">
         <sch:p>It seems unlikely that most if not all SSP resources require a FedRAMP-specific prop.</sch:p>
         <sch:p>The current fedramp-automation content appears to have presumed that NIST would supply (and be normative for) RMF prop types (NIST
             has/is not) as opposed to FedRAMP prop types.</sch:p>
         <sch:assert test="oscal:resource[prop[@ns = 'https://fedramp.gov/ns/oscal']]">A FedRAMP SSP must include FedRAMP-specific props in
             back-matter resources</sch:assert>
     </sch:rule>
-    <sch:rule context="oscal:back-matter/oscal:resource">
+    <sch:rule context="/oscal:system-security-plan/oscal:back-matter/oscal:resource">
         <!-- create a "path" to the context -->
         <sch:let name="path" value="concat(string-join(ancestor-or-self::* ! name(), '/'), ' ', @uuid, ' &quot;', oscal:title, '&quot;')" />
         <!-- the following assertion recapitulates the XML Schema constraint -->
