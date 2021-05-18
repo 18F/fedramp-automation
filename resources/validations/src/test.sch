@@ -3,6 +3,7 @@
     queryBinding="xslt2"
     xmlns:sch="http://purl.oclc.org/dsdl/schematron"
     xmlns:sqf="http://www.schematron-quickfix.com/validator/process">
+
     <sch:ns
         prefix="oscal"
         uri="http://csrc.nist.gov/ns/oscal/1.0"/>
@@ -30,29 +31,69 @@
 
     <sch:pattern>
 
+        <sch:title>Document level rules</sch:title>
+
         <sch:rule
             context="/">
             <sch:p>Show distinct names used in props</sch:p>
             <sch:report
-                role="INFO"
+                role="info"
                 test="$INFO">Distinct prop names: <sch:value-of
                     select="string-join(distinct-values(//oscal:prop/@name), ' ')"/></sch:report>
         </sch:rule>
 
         <sch:rule
-            context="oscal:*[starts-with(@href, '#')]">
+            context="/">
+
+            <sch:let
+                name="id"
+                value="@id"/>
+
+            <sch:assert
+                id="duplicate-ids"
+                role="error"
+                test="
+                    every $id in //@id
+                        satisfies not(@id[. = $id][2])">id <sch:value-of
+                    select="@id"/> has duplicates</sch:assert>
+
+        </sch:rule>
+
+        <sch:rule
+            context="oscal:*[@uuid]">
+
+            <sch:let
+                name="uuid"
+                value="@uuid"/>
+
+            <sch:report
+                id="duplicate-uuids"
+                role="warning"
+                test="oscal:*[@uuid = $uuid][2]">uuid <sch:value-of
+                    select="@uuid"/> has duplicates</sch:report>
+
+        </sch:rule>
+
+        <sch:rule
+            context="oscal:*[starts-with(@href, '#')]"
+            id="intra-document-hrefs-have-target">
+
             <sch:p>Ensure all intra-document @hrefs have an intra-document target</sch:p>
+
             <sch:let
                 name="ref"
                 value="substring-after(@href, '#')"/>
+
             <sch:assert
-                role="ERROR"
+                id="invalid-href-target"
+                role="error"
                 test="$ref = //@uuid"><sch:value-of
                     select="@rel"/>
                 <sch:name/> has invalid intra-document href <sch:value-of
                     select="@href"/></sch:assert>
+
             <sch:report
-                role="INFO"
+                role="info"
                 test="$INFO and $ref = //@uuid"><sch:value-of
                     select="@rel"/>
                 <sch:name/> has valid intra-document href to <sch:value-of
@@ -75,13 +116,13 @@
             <sch:p>The current fedramp-automation content appears to have presumed that NIST would supply (and be normative for) RMF prop types (NIST
                 has/is not) as opposed to FedRAMP prop types.</sch:p>
             <sch:assert
-                test="oscal:resource[prop[@ns = 'https://fedramp.gov/ns/oscal']]">A FedRAMP SSP MUST include FedRAMP-specific props in back-matter
+                test="oscal:resource[prop[@ns = 'https://fedramp.gov/ns/oscal']]">A FedRAMP SSP must include FedRAMP-specific props in back-matter
                 resources</sch:assert>
         </sch:rule>
 
         <sch:rule
             context="oscal:back-matter/oscal:resource">
-            
+
             <!-- create a "path" to the context -->
             <sch:let
                 name="path"
@@ -89,34 +130,38 @@
 
             <!-- the following assertion recapitulates the XML Schema constraint -->
             <sch:assert
-                role="ERROR"
-                test="@uuid">A &lt;<sch:name/>&gt; element MUST have a uuid attribute </sch:assert>
+                role="error"
+                test="@uuid">A &lt;<sch:name/>&gt; element must have a uuid attribute </sch:assert>
 
             <!--<sch:assert
-                role="ERROR"
+                role="error"
                 test="oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type']">&lt;<sch:name/> uuid="<sch:value-of
-                    select="@uuid"/>"&gt; MUST have a &lt;prop&gt; element in the FedRAMP namespace</sch:assert>-->
+                    select="@uuid"/>"&gt; must have a &lt;prop&gt; element in the FedRAMP namespace</sch:assert>-->
 
             <sch:assert
-                role="WARNING"
+                id="resource-has-title"
+                role="warning"
                 test="oscal:title">&lt;<sch:name/> uuid="<sch:value-of
                     select="@uuid"/>"&gt; SHOULD have a title</sch:assert>
 
             <sch:assert
-                role="ERROR"
+                id="resource-has-rlink"
+                role="error"
                 test="oscal:rlink">&lt;<sch:name/> uuid="<sch:value-of
-                    select="@uuid"/>"&gt; MUST have an &lt;rlink&gt; element</sch:assert>
+                    select="@uuid"/>"&gt; must have an &lt;rlink&gt; element</sch:assert>
 
-            <sch:report
-                role="INFO"
-                test="$INFO and @uuid = //@href[matches(., '^#')] ! substring-after(., '#')"><sch:value-of
-                    select="$path"/> has no reference within the document</sch:report>
+            <sch:assert
+                id="resource-is-referenced"
+                role="info"
+                test="$INFO and @uuid = (//@href[matches(., '^#')] ! substring-after(., '#'))"><sch:value-of
+                    select="$path"/> has no reference within the document</sch:assert>
 
         </sch:rule>
 
         <sch:rule
             context="oscal:back-matter/oscal:resource/oscal:prop[@name = 'type']">
             <sch:assert
+                id="attachment-type-is-valid"
                 test="@value = $attachment-types">Found unknown attachment type «<sch:value-of
                     select="@value"/>» in <sch:value-of
                     select="
@@ -129,15 +174,16 @@
         <sch:rule
             context="oscal:back-matter/oscal:resource/oscal:rlink">
             <sch:assert
-                role="ERROR"
-                test="@href">A &lt;<sch:name/>&gt; element MUST have an href attribute</sch:assert>
+                id="rlink-has-href"
+                role="error"
+                test="@href">A &lt;<sch:name/>&gt; element must have an href attribute</sch:assert>
 
             <!-- Both doc-avail() and unparsed-text-available() are failing on arbitrary hrefs -->
             <!--<sch:assert test="unparsed-text-available(@href)">the &lt;<sch:name/>&gt; element href attribute refers to a non-existent
                 document</sch:assert>-->
 
-            <!--<sch:assert
-                role="WARNING"
+            <!--<sch:assert id="rlink-has-media-type"
+                role="warning"
                 test="$WARNING and @media-type">the &lt;<sch:name/>&gt; element SHOULD have a media-type attribute</sch:assert>-->
 
         </sch:rule>
@@ -160,69 +206,80 @@
             <!-- That is a requirement worthy of discussion -->
 
             <sch:assert
-                role="ERROR"
+                id="lacks-fedramp-citations"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'fedramp-citations']]">A FedRAMP
-                OSCAL SSP MUST attach the FedRAMP Applicable Laws and Regulations</sch:assert>
+                OSCAL SSP must attach the FedRAMP Applicable Laws and Regulations</sch:assert>
 
             <sch:assert
-                role="ERROR"
+                id="lacks-fedramp-acronyms"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'fedramp-acronyms']]">A FedRAMP
-                OSCAL SSP MUST attach the FedRAMP Master Acronym and Glossary</sch:assert>
+                OSCAL SSP must attach the FedRAMP Master Acronym and Glossary</sch:assert>
 
             <sch:assert
-                role="ERROR"
+                id="lacks-fedramp-logo"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'fedramp-logo']]">A FedRAMP OSCAL
-                SSP MUST attach the FedRAMP Master Acronym and Glossary</sch:assert>
+                SSP must attach the FedRAMP Master Acronym and Glossary</sch:assert>
 
             <!-- TODO: ensure multiple Policy and Procedure attachments are present -->
             <sch:assert
-                role="ERROR"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = ('Policy', 'Procedure')]]">A
-                FedRAMP OSCAL SSP MUST attach Information Security Policies and Procedures</sch:assert>
+                FedRAMP OSCAL SSP must attach Information Security Policies and Procedures</sch:assert>
 
             <!-- Contrast with the "Separation of Duties Matrix" assertion -->
             <sch:assert
-                role="ERROR"
+                id="lacks-user-guide"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'user-guide']]">A FedRAMP OSCAL
-                SSP MUST attach a User Guide</sch:assert>
+                SSP must attach a User Guide</sch:assert>
 
             <!-- Contrast with the "Separation of Duties Matrix" assertion -->
             <sch:assert
-                role="ERROR"
-                test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'pia']]">A FedRAMP OSCAL SSP MUST
+                id="lacks-pia"
+                role="error"
+                test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'pia']]">A FedRAMP OSCAL SSP must
                 attach a Privacy Impact Assessment</sch:assert>
 
             <!-- Contrast with the "Separation of Duties Matrix" assertion -->
             <sch:assert
-                role="ERROR"
+                id="lacks-rules-of-behavior"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'rules-of-behavior']]">A FedRAMP
-                OSCAL SSP MUST attach Rules of Behavior</sch:assert>
+                OSCAL SSP must attach Rules of Behavior</sch:assert>
 
             <!-- This assertion is currently failing because the target resource lacks a specific type (has just "plan") -->
             <!-- Contrast with the "Separation of Duties Matrix" assertion -->
             <sch:assert
-                role="ERROR"
+                id="lacks-contingency-plan"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'contingency-plan']]">A FedRAMP
-                OSCAL SSP MUST attach a Contingency plan</sch:assert>
+                OSCAL SSP must attach a Contingency Plan</sch:assert>
 
             <!-- This assertion is currently failing because the target resource lacks a specific type (has just "plan") -->
             <!-- Contrast with the "Separation of Duties Matrix" assertion -->
             <sch:assert
-                role="ERROR"
+                id="lacks-configuration-management-plan"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'configuration-management-plan']]">A
-                FedRAMP OSCAL SSP MUST attach a Configuration Management plan</sch:assert>
+                FedRAMP OSCAL SSP must attach a Configuration Management Plan</sch:assert>
 
             <!-- This assertion is currently failing because the target resource lacks a specific type (has just "plan") -->
             <!-- Contrast with the "Separation of Duties Matrix" assertion -->
             <sch:assert
-                role="ERROR"
-                test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'incident-response-plan']]">A
-                FedRAMP OSCAL SSP MUST attach an Incident Response plan</sch:assert>
+                id="lacks-incident-response-plan"
+                role="error"
+                test="
+                    oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'incident-response-plan']]">A
+                FedRAMP OSCAL SSP must attach an Incident Response Plan</sch:assert>
 
             <sch:assert
-                role="ERROR"
+                id="lacks-separation-of-duties-matrix"
+                role="error"
                 test="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'separation-of-duties-matrix']]">A
-                FedRAMP OSCAL SSP MUST attach a Separation of Duties Matrix</sch:assert>
+                FedRAMP OSCAL SSP must attach a Separation of Duties Matrix</sch:assert>
 
         </sch:rule>
 
