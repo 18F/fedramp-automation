@@ -1,275 +1,183 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<x:description
-    schematron="../src/test.sch"
-    xmlns:oscal="http://csrc.nist.gov/ns/oscal/1.0"
-    xmlns:x="http://www.jenitennison.com/xslt/xspec">
-
-    <x:param
-        expand-text="true"
-        name="visit-text" />
-
-    <x:scenario
-        label="For a OSCAL FedRAMP SSP">
-
-        <x:scenario
-            label="an @id attribute">
-            <x:scenario
-                label="is unique">
+<?xml version="1.0" encoding="utf-8"?>
+<x:description schematron="../src/test.sch"
+               xmlns:oscal="http://csrc.nist.gov/ns/oscal/1.0"
+               xmlns:x="http://www.jenitennison.com/xslt/xspec">
+    <x:param expand-text="true"
+             name="visit-text" />
+    <x:scenario label="For a OSCAL FedRAMP SSP">
+        <x:scenario label="an @id attribute">
+            <x:scenario label="is unique">
                 <x:context>
-                    <context
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <role
-                            id="fedramp-pmo" />
-                        <role
-                            id="prepared-by" /></context>
-                </x:context>
-                <x:expect-not-assert
-                    id="duplicate-ids"
-                    label="@id attributes are unique" />
-            </x:scenario>
-            <x:scenario
-                label="is not unique">
-                <x:context>
-                    <context
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0"><role
-                            id="fedramp-pmo" />
-                        <role
-                            id="prepared-by" />
-                        <role
-                            id="prepared-by" />
+                    <context xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <role id="fedramp-pmo" />
+                        <role id="prepared-by" />
                     </context>
                 </x:context>
-                <x:expect-assert
-                    id="duplicate-ids"
-                    label="@id attributes are unique" />
+                <x:expect-not-assert id="duplicate-ids"
+                                     label="@id attributes are unique" />
+            </x:scenario>
+            <x:scenario label="is not unique">
+                <x:context>
+                    <context xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <role id="fedramp-pmo" />
+                        <role id="prepared-by" />
+                        <role id="prepared-by" />
+                    </context>
+                </x:context>
+                <x:expect-assert id="duplicate-ids"
+                                 label="@id attributes are unique" />
             </x:scenario>
         </x:scenario>
-
-        <x:scenario
-            label="a @uuid attribute">
-            <x:scenario
-                label="is unique">
+        <x:scenario label="a @uuid attribute">
+            <x:scenario label="is unique">
                 <x:context>
-                    <stuff
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <role
-                            uuid="fedramp-pmo" />
-                        <role
-                            uuid="prepared-by" /></stuff>
-                </x:context>
-                <x:expect-not-assert
-                    id="duplicate-uuids"
-                    label="@uuid attributes are unique" />
-            </x:scenario>
-            <x:scenario
-                label="is not unique">
-                <x:context>
-                    <stuff
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0"><role
-                            uuid="fedramp-pmo" />
-                        <role
-                            uuid="prepared-by" />
-                        <role
-                            uuid="prepared-by" /></stuff>
-                </x:context>
-                <x:expect-assert
-                    id="duplicate-uuids"
-                    label="@uuid attributes are not unique" />
-            </x:scenario>
-        </x:scenario>
-
-        <x:scenario
-            label="an intra-document @href attribute">
-            <x:scenario
-                label="has a target">
-                <x:context>
-                    <stuff
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <link
-                            href="#target" />
-                        <resource
-                            uuid="target" />
+                    <stuff xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <role uuid="fedramp-pmo" />
+                        <role uuid="prepared-by" />
                     </stuff>
                 </x:context>
-                <x:expect-not-assert
-                    id="invalid-href-target"
-                    label="valid @href" />
+                <x:expect-not-assert id="duplicate-uuids"
+                                     label="@uuid attributes are unique" />
             </x:scenario>
-            <x:scenario
-                label="lacks a target">
+            <x:scenario label="is not unique">
                 <x:context>
-                    <stuff
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <link
-                            href="#target" />
-                        <resource
-                            uuid="other" />
+                    <stuff xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <role uuid="fedramp-pmo" />
+                        <role uuid="prepared-by" />
+                        <role uuid="prepared-by" />
                     </stuff>
                 </x:context>
-                <x:expect-not-assert
-                    id="invalid-href-target"
-                    label="valid @href" />
+                <x:expect-assert id="duplicate-uuids"
+                                 label="@uuid attributes are not unique" />
             </x:scenario>
         </x:scenario>
-
-        <x:scenario
-            label="Required attachments: ">
-
-            <x:scenario
-                label="when the FedRAMP Applicable Laws and Regulations attachment">
-                <x:scenario
-                    label="is present">
+        <x:scenario label="an intra-document @href attribute">
+            <x:scenario label="has a target">
+                <x:context>
+                    <stuff xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <link href="#target" />
+                        <resource uuid="target" />
+                    </stuff>
+                </x:context>
+                <x:expect-not-assert id="invalid-href-target"
+                                     label="valid @href" />
+            </x:scenario>
+            <x:scenario label="lacks a target">
+                <x:context>
+                    <stuff xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <link href="#target" />
+                        <resource uuid="other" />
+                    </stuff>
+                </x:context>
+                <x:expect-not-assert id="invalid-href-target"
+                                     label="valid @href" />
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="Required attachments: ">
+            <x:scenario label="when the FedRAMP Applicable Laws and Regulations attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="fedramp-citations" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="fedramp-citations" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-fedramp-citations"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-fedramp-citations"
+                                         label="is present" />
                 </x:scenario>
-
             </x:scenario>
-
-            <x:scenario
-                label="when the FedRAMP Master Acronym and Glossary attachment">
-                <x:scenario
-                    label="is present">
+            <x:scenario label="when the FedRAMP Master Acronym and Glossary attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="fedramp-acronyms" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="fedramp-acronyms" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-fedramp-acronyms"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-fedramp-acronyms"
+                                         label="is present" />
                 </x:scenario>
             </x:scenario>
-
-            <x:scenario
-                label="when the FedRAMP logo attachment">
-                <x:scenario
-                    label="is present">
+            <x:scenario label="when the FedRAMP logo attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="fedramp-logo" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="fedramp-logo" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-fedramp-logo"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-fedramp-logo"
+                                         label="is present" />
                 </x:scenario>
             </x:scenario>
-
-            <x:scenario
-                label="when the User Guide attachment">
-                <x:scenario
-                    label="is present">
+            <x:scenario label="when the User Guide attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="user-guide" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="user-guide" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-user-guide"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-user-guide"
+                                         label="is present" />
                 </x:scenario>
             </x:scenario>
-
-            <x:scenario
-                label="when the Privacy Impact Assessment attachment">
-                <x:scenario
-                    label="is present">
+            <x:scenario label="when the Privacy Impact Assessment attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="pia" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="pia" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-pia"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-pia"
+                                         label="is present" />
                 </x:scenario>
             </x:scenario>
-
-            <x:scenario
-                label="when the Rules of Behavior attachment">
-                <x:scenario
-                    label="is present">
+            <x:scenario label="when the Rules of Behavior attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="rules-of-behavior" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="rules-of-behavior" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-rules-of-behavior"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-rules-of-behavior"
+                                         label="is present" />
                 </x:scenario>
             </x:scenario>
-
-            <x:scenario
-                label="when the Contingency Plan attachment">
-                <x:scenario
-                    label="is present">
+            <x:scenario label="when the Contingency Plan attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="contingency-plan" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="contingency-plan" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-contingency-plan"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-contingency-plan"
+                                         label="is present" />
                 </x:scenario>
             </x:scenario>
-
-            <x:scenario
-                label="when the Configuration Management attachment">
-                <x:scenario
-                    label="is present">
+            <x:scenario label="when the Configuration Management attachment">
+                <x:scenario label="is present">
                     <x:context>
-                        <resource
-                            xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                            <prop
-                                name="type"
-                                ns="https://fedramp.gov/ns/oscal"
-                                value="configuration-management-plan" />
+                        <resource xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                            <prop name="type"
+                                  ns="https://fedramp.gov/ns/oscal"
+                                  value="configuration-management-plan" />
                         </resource>
                     </x:context>
-                    <x:expect-not-assert
-                        id="lacks-configuration-management-plan"
-                        label="is present" />
+                    <x:expect-not-assert id="lacks-configuration-management-plan"
+                                         label="is present" />
                 </x:scenario>
             </x:scenario>
-
         </x:scenario>
     </x:scenario>
-
 </x:description>

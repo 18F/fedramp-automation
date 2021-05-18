@@ -3,5 +3,5 @@
 tidy \
     -config .tidyrc \
     -modify \
-    ./src/*.sch \
+    ./src/**/*.sch \
     ./test/*.xspec

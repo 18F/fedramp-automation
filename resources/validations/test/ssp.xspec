@@ -1039,7 +1039,7 @@
                                      label="it is valid." />
             </x:scenario>
         </x:scenario>
-        <x:scenario label="Chapter 15">
+        <x:scenario label="Section 15">
             <x:scenario label="when required attachments">
                 <x:pending label="specified via structured data">
                     <x:scenario label="has Digital Identity Worksheet data">
