@@ -494,7 +494,6 @@
          <enum value="policy" short-label="Policy">Polciy</enum>
          <enum value="procedure" short-label="Procedure">Procedure</enum>
          <enum value="guide" short-label="Guidance">Guidance Document</enum>
-         <enum value="pia" short-label="P.I.A.">Privacy Impact Assessment</enum>
          <enum value="rules-of-behavior" short-label="R.O.B.">Rules of Behavior</enum>
          <enum value="plan" short-label="Plan">Plan</enum>
          <enum value="system-security-plan" short-label="SSP">System Security Plan</enum>

@@ -504,5 +504,4 @@
     </sch:pattern>
     <sch:include href="./ssp/attachments-general.sch" />
     <sch:include href="./ssp/attachments-specific.sch" />
-    <sch:include href="./ssp/document.sch" />
 </sch:schema>
