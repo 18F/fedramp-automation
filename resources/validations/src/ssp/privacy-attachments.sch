@@ -77,7 +77,9 @@
             context="oscal:system-information"
             see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 51">
 
-            <sch:assert id="has-privacy-sensitive-designation"
+            <sch:assert
+                id="has-privacy-sensitive-designation"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@name = 'privacy-sensitive' and @value = ('yes', 'no')]">Lacks privacy-sensitive
                 designation</sch:assert>
 
@@ -87,35 +89,51 @@
             context="//oscal:system-information[oscal:prop[@name = 'privacy-sensitive' and @value = 'yes']]"
             see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 51">
 
-            <sch:assert id="has-pta-question-1"
+            <sch:assert
+                id="has-pta-question-1"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-1']">Missing
                 PTA/PIA qualifying question #1.</sch:assert>
 
-            <sch:assert id="has-pta-question-2"
+            <sch:assert
+                id="has-pta-question-2"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-2']">Missing
                 PTA/PIA qualifying question #2.</sch:assert>
 
-            <sch:assert id="has-pta-question-3"
+            <sch:assert
+                id="has-pta-question-3"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-3']">Missing
                 PTA/PIA qualifying question #3.</sch:assert>
 
-            <sch:assert id="has-pta-question-4"
+            <sch:assert
+                id="has-pta-question-4"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-4']">Missing
                 PTA/PIA qualifying question #4.</sch:assert>
 
-            <sch:assert id="has-pta-question-1-answered"
+            <sch:assert
+                id="has-pta-question-1-answered"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-1' and @value = ('yes', 'no')]">The
                 answer to PTA/PIA qualifying question #1 is neither yes nor no.</sch:assert>
 
-            <sch:assert id="has-pta-question-2-answered"
+            <sch:assert
+                id="has-pta-question-2-answered"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-2' and @value = ('yes', 'no')]">The
                 answer to PTA/PIA qualifying question #2 is neither yes nor no.</sch:assert>
 
-            <sch:assert id="has-pta-question-3-answered"
+            <sch:assert
+                id="has-pta-question-3-answered"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-3' and @value = ('yes', 'no')]">The
                 answer to PTA/PIA qualifying question #3 is neither yes nor no.</sch:assert>
 
-            <sch:assert id="has-pta-question-4-answered"
+            <sch:assert
+                id="has-pta-question-4-answered"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-4' and @value = ('yes', 'no')]">The
                 answer to PTA/PIA qualifying question #4 is neither yes nor no.</sch:assert>
 
@@ -125,11 +143,15 @@
             context="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'pta-4' and @value = 'yes']"
             see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 51">
 
-            <sch:assert id="has-sorn"
+            <sch:assert
+                id="has-sorn"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'sorn-id']">Missing
                 SORN ID</sch:assert>
 
-            <sch:assert id="has-sorn-id"
+            <sch:assert
+                id="has-sorn-id"
+                role="error"
                 test="//oscal:system-information/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and class = 'pta' and @name = 'sorn-id' and @value != '']">Missing
                 SORN ID</sch:assert>
 
