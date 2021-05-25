@@ -15,12 +15,14 @@
 
     <sch:pattern>
 
-        <sch:title>A FedRAMP SSP must incorporate policy and procedure documents corresponding to the 17 NIST SP 800-54r4 control families</sch:title>
+        <sch:title>A FedRAMP SSP must incorporate one policy document and one procedure document for each of the 17 NIST SP 800-54r4 control families</sch:title>
 
         <!-- TODO: handle attachments declared by component (see implemented-requirement ac-1 for an example) -->
 
+        <!-- FIXME: XSpec testing malfunctions when the following rule context is constrained to XX-1 control-ids -->
         <sch:rule
-            context="oscal:implemented-requirement[matches(@control-id, '^[a-z]{2}-1$')]">
+            context="oscal:implemented-requirement (: [matches(@control-id, '^[a-z]{2}-1$')] :)"
+            see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 48">
 
             <sch:assert
                 id="has-policy-link"
@@ -37,7 +39,7 @@
                 value="distinct-values(descendant::oscal:by-component/oscal:link[@rel = 'policy']/@href ! substring-after(., '#'))" />
 
             <sch:assert
-                id="policy-attachment-resource"
+                id="has-policy-attachment-resource"
                 role="error"
                 test="
                     every $ref in $policy-hrefs
@@ -48,6 +50,8 @@
                 <sch:span
                     class="message"> lacks policy attachment resource(s) </sch:span><sch:value-of
                     select="string-join($policy-hrefs, ', ')" /></sch:assert>
+            
+            <!-- TODO: ensure resource has an rlink -->
 
             <sch:assert
                 id="has-procedure-link"
@@ -64,7 +68,7 @@
                 value="distinct-values(descendant::oscal:by-component/oscal:link[@rel = 'procedure']/@href ! substring-after(., '#'))" />
 
             <sch:assert
-                id="procedure-attachment-resource"
+                id="has-procedure-attachment-resource"
                 role="error"
                 test="
                     (: targets of links exist in the document :)
@@ -76,17 +80,22 @@
                 <sch:span
                     class="message"> lacks procedure attachment resource(s) </sch:span><sch:value-of
                     select="string-join($procedure-hrefs, ', ')" /></sch:assert>
+            
+            <!-- TODO: ensure resource has an rlink -->
 
         </sch:rule>
 
         <sch:rule
             context="oscal:by-component/oscal:link[@rel = ('policy', 'procedure')]">
+            
+            <sch:p>Each SP 800-53 control family must have unique policy and unique procedure documents</sch:p>
 
             <sch:let
                 name="ir"
                 value="ancestor::oscal:implemented-requirement" />
 
             <sch:report
+                id="has-reuse"
                 role="error"
                 test="
                     (: the current @href is in :)
