@@ -144,95 +144,6 @@
         </x:scenario>
 
         <x:scenario
-            label="when the Privacy Threshold Analysis">
-            <x:scenario
-                label="is declared">
-                <x:context>
-                    <system-security-plan
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <back-matter>
-                            <resource
-                                uuid="6e8df314-bf94-4ff6-8570-c2592fbd2d7">
-                                <title>Privacy Threshold Analysis</title>
-                                <prop
-                                    name="type"
-                                    ns="https://fedramp.gov/ns/oscal"
-                                    value="pta" />
-                            </resource>
-                        </back-matter>
-                    </system-security-plan>
-                </x:context>
-                <x:expect-not-assert
-                    id="has-pta"
-                    label="that is correct" />
-            </x:scenario>
-            <x:scenario
-                label="is missing">
-                <x:context>
-                    <system-security-plan
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <metadata />
-                    </system-security-plan>
-                </x:context>
-                <x:expect-assert
-                    id="has-pta"
-                    label="that is an error" />
-            </x:scenario>
-        </x:scenario>
-
-        <x:scenario
-            label="when the Privacy Impact Assessment">
-            <x:scenario
-                label="is declared">
-                <x:context>
-                    <system-security-plan
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <back-matter>
-                            <resource
-                                uuid="fab59751-b855-40cb-93c1-492562e20e18">
-                                <title>Privacy Impact Assessment</title>
-                                <prop
-                                    name="type"
-                                    value="pia" />
-                                <prop
-                                    name="publication"
-                                    value="Document Date" />
-                                <prop
-                                    name="version"
-                                    value="Document Version" />
-                                <rlink
-                                    href="./documents/pia.docx"
-                                    media-type="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-                                <base64
-                                    filename="pia.docx"
-                                    media-type="application/vnd.openxmlformats-officedocument.wordprocessingml.document">00000000</base64>
-                                <remarks>
-                                    <p>Table 15-1 Attachments: Privacy Impact Assessment</p>
-                                    <p>May use <code>rlink</code> with a relative path, or embedded as <code>base64</code>.</p>
-                                </remarks>
-                            </resource>
-                        </back-matter>
-                    </system-security-plan>
-                </x:context>
-                <x:expect-not-assert
-                    id="has-pia"
-                    label="that is correct" />
-            </x:scenario>
-            <x:scenario
-                label="is missing">
-                <x:context>
-                    <system-security-plan
-                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
-                        <metadata />
-                    </system-security-plan>
-                </x:context>
-                <x:expect-assert
-                    id="has-pia"
-                    label="that is an error" />
-            </x:scenario>
-        </x:scenario>
-
-        <x:scenario
             label="when the privacy-sensitive designation">
             <x:scenario
                 label="is present">
@@ -265,6 +176,42 @@
         </x:scenario>
 
         <x:scenario
+            label="when the privacy-sensitive designation value">
+            <x:scenario
+                label="is yes or no">
+                <x:context>
+                    <system-security-plan
+                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <system-information>
+                            <prop
+                                name="privacy-sensitive"
+                                value="yes" />
+                        </system-information>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-not-assert
+                    id="has-correct-yes-or-no-answer"
+                    label="that is correct" />
+            </x:scenario>
+            <x:scenario
+                label="is not yes or no">
+                <x:context>
+                    <system-security-plan
+                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <system-information>
+                            <prop
+                                name="privacy-sensitive"
+                                value="dunno" />
+                        </system-information>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-assert
+                    id="has-correct-yes-or-no-answer"
+                    label="that is an error" />
+            </x:scenario>
+        </x:scenario>
+
+        <x:scenario
             label="when the PTA/PIA qualifying question #1">
             <x:scenario
                 label="is present">
@@ -273,7 +220,6 @@
                         xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                         <system-characteristics>
                             <system-information>
-                                <!--Does the ISA collect, maintain, or share PII in any identifiable form? -->
                                 <prop
                                     class="pta"
                                     name="pta-1"
@@ -308,7 +254,6 @@
                         xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                         <system-characteristics>
                             <system-information>
-                                <!--Does the ISA collect, maintain, or share PII in any identifiable form? -->
                                 <prop
                                     class="pta"
                                     name="pta-1"
@@ -319,7 +264,7 @@
                     </system-security-plan>
                 </x:context>
                 <x:expect-not-assert
-                    id="has-pta-question-1-answered"
+                    id="has-correct-yes-or-no-answer"
                     label="that is correct" />
             </x:scenario>
             <x:scenario
@@ -329,7 +274,6 @@
                         xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                         <system-characteristics>
                             <system-information>
-                                <!--Does the ISA collect, maintain, or share PII in any identifiable form? -->
                                 <prop
                                     class="pta"
                                     name="pta-1"
@@ -340,7 +284,44 @@
                     </system-security-plan>
                 </x:context>
                 <x:expect-assert
-                    id="has-pta-question-1-answered"
+                    id="has-correct-yes-or-no-answer"
+                    label="that is an error" />
+            </x:scenario>
+        </x:scenario>
+
+        <x:scenario
+            label="when the Privacy Impact Assessment">
+            <x:scenario
+                label="is declared">
+                <x:context>
+                    <system-security-plan
+                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <back-matter>
+                            <resource
+                                uuid="fab59751-b855-40cb-93c1-492562e20e18">
+                                <prop
+                                    name="type"
+                                    ns="https://fedramp.gov/ns/oscal"
+                                    value="pia" />
+                            </resource>
+                        </back-matter>
+                    </system-security-plan>
+                </x:context>
+                <x:expect-not-assert
+                    id="has-pia"
+                    label="that is correct" />
+            </x:scenario>
+            <x:scenario
+                label="is missing">
+                <x:context>
+                    <system-security-plan
+                        xmlns="http://csrc.nist.gov/ns/oscal/1.0">
+                        <metadata />
+                        <back-matter />
+                    </system-security-plan>
+                </x:context>
+                <x:expect-assert
+                    id="has-pia"
                     label="that is an error" />
             </x:scenario>
         </x:scenario>
