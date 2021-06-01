@@ -8,8 +8,9 @@
     <x:scenario
         label="FedRAMP OSCAL SSP">
 
-        <x:scenario label="for the policy facet of P&amp;P controls, ">
-            
+        <x:scenario
+            label="for the policy facet of P&amp;P controls, ">
+
             <x:scenario
                 label="when the policy link to the resource declaring the policy document attachment">
 
@@ -20,7 +21,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <link
@@ -52,7 +53,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <!--<link
@@ -89,7 +90,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <link
@@ -121,7 +122,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <link
@@ -152,11 +153,12 @@
 
 
 
-        <x:scenario label="for the procedure facet of P&amp;P controls, ">
-            
+        <x:scenario
+            label="for the procedure facet of P&amp;P controls, ">
+
             <x:scenario
                 label="when the procedure link to the resource declaring the procedure document attachment">
-                
+
                 <x:scenario
                     label="is present">
                     <x:context>
@@ -164,7 +166,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <link
@@ -188,7 +190,7 @@
                         id="has-procedure-link"
                         label="that is correct" />
                 </x:scenario>
-                
+
                 <x:scenario
                     label="is absent">
                     <x:context>
@@ -196,7 +198,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <!--<link
@@ -220,12 +222,12 @@
                         id="has-procedure-link"
                         label="that is an error" />
                 </x:scenario>
-                
+
             </x:scenario>
-            
+
             <x:scenario
                 label="when the procedure attachment resource">
-                
+
                 <x:scenario
                     label="is present">
                     <x:context>
@@ -233,7 +235,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <link
@@ -257,7 +259,7 @@
                         id="has-procedure-attachment-resource"
                         label="that is correct" />
                 </x:scenario>
-                
+
                 <x:scenario
                     label="is absent">
                     <x:context>
@@ -265,7 +267,7 @@
                             xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                             <control-implementation>
                                 <implemented-requirement
-                                    control-id="XX-1">
+                                    control-id="xx-1">
                                     <statement>
                                         <by-component>
                                             <link
@@ -289,20 +291,22 @@
                         id="has-procedure-attachment-resource"
                         label="that is an error" />
                 </x:scenario>
-                
+
             </x:scenario>
-            
+
         </x:scenario>
-        
-        <x:scenario label="for all P&amp;P controls, ">
-            
-            <x:scenario label="when no resource is re-used">
+
+        <x:scenario
+            label="for all P&amp;P controls, ">
+
+            <x:scenario
+                label="when no resource is re-used">
                 <x:context>
                     <system-security-plan
                         xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                         <control-implementation>
                             <implemented-requirement
-                                control-id="XX-1">
+                                control-id="xx-1">
                                 <statement>
                                     <by-component>
                                         <link
@@ -342,14 +346,15 @@
                     id="has-reuse"
                     label="that is correct" />
             </x:scenario>
-            
-            <x:scenario label="when a resource is re-used">
+
+            <x:scenario
+                label="when a resource is re-used">
                 <x:context>
                     <system-security-plan
                         xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                         <control-implementation>
                             <implemented-requirement
-                                control-id="XX-1">
+                                control-id="xx-1">
                                 <statement>
                                     <by-component>
                                         <link
@@ -389,10 +394,9 @@
                     id="has-reuse"
                     label="that is an error" />
             </x:scenario>
-            
+
         </x:scenario>
 
     </x:scenario>
 
 </x:description>
-
