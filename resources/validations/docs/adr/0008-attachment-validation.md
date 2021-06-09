@@ -1,6 +1,6 @@
 # 8. Attachment Validation Approach
 
-Date: 2021-06-08
+Date: 2021-06-09
 
 ## Status
 
@@ -8,7 +8,7 @@ Accepted
 
 ## Context
 
-The 10x ASAP Development Team, in the course or work for [18F/fedramp-automaton#52](https://github.com/18F/fedramp-automation/issues/52), needs to define the minimally viable checks needed to determine attachment data in `oscal:back-matter/oscal:resources` is correctly attached to [an OSCAL SSP instance](https://pages.nist.gov/OSCAL/concepts/layer/implementation/ssp/). Per [ADR 2](./0002-xml-schematron-usage.md) and [ADR 4](./0004-xslt-function-library.md), the runtime design with exclusive use of XSLT presents architectural limitations.
+The 10x ASAP Development Team, in the course of work for [18F/fedramp-automaton#52](https://github.com/18F/fedramp-automation/issues/52), needs to define the minimally viable checks needed to determine attachment data in `oscal:back-matter/oscal:resources` is correctly attached to [an OSCAL SSP instance](https://pages.nist.gov/OSCAL/concepts/layer/implementation/ssp/). Per [ADR 2](./0002-xml-schematron-usage.md) and [ADR 4](./0004-xslt-function-library.md), the runtime design with exclusive use of XSLT presents architectural limitations.
 
 1. XSLT 3.0, as a standard, has limited facility to parse non-XML files. If not a valid XML document, it must be text-only (to be parsed with [`fn:unparsed-text()`](https://www.w3.org/TR/xpath-functions-31/#func-unparsed-text)).
 2. File path resolution becomes complex with relative paths in OSCAL ([`oscal:rlink`](https://pages.nist.gov/OSCAL/reference/latest/system-security-plan/xml-reference/#/system-security-plan/back-matter)) when _not_ using traditional file systems local to where validations execute and/or without a stateful backend service.
@@ -59,5 +59,5 @@ For attachments, the FedRAMP validations will only support the IANA media-types 
 ## Consequences
 - 10x ASAP Team will focus on minimal validation of content and defer that work to either:
   - Advanced validation processing done without XSLT, potentially to be later integrated into this work through an interface
-  - Manual staff review, as the majority of documents are free-form policy documents without OSCAL or other structured models; structured validation is superfluous and needlessly complex when manual review is still required
+  - Manual staff review, as the majority of documents are free-form policy documents without structured models (OSCAL or otherwise); structured validation is superfluous and needlessly complex when manual review is still required
 - 10x ASAP Team will limit and constrain the type of attachment files accepted to the benefit of standardization for the FedRAMP program overall.
