@@ -15,7 +15,7 @@ The 10x ASAP Development Team, in the course or work for [18F/fedramp-automaton#
 3. Fully remote paths defined in ([`oscal:rlink`](https://pages.nist.gov/OSCAL/reference/latest/system-security-plan/xml-reference/#/system-security-plan/back-matter))s presume, especially given the frequent reliance on HTTP and HTTPS URIs, will be problematic when developing browser-based software. We cannot presume [permissive CORS configurations](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) and this prevents low-friction access of remote resources, many of which will be controlled by a third party.
 
 
-Additionally, there are many different filetypes [supported by the OSCAL specification](https://pages.nist.gov/OSCAL/reference/latest/system-security-plan/json-reference/#/system-security-plan/back-matter/resources/rlinks/media-type), so long as a `@media-type` is in IANA Media Type Registry. This registry is significant, and makes validation onerous. Supporting all medita types has limited benefits for the long tail of registered but obscure formats that FedRAMP will not encounter and are still opaque. They are not XML and cannot be analyzed, only checked or their existence.
+Additionally, there are many different filetypes [supported by the OSCAL specification](https://pages.nist.gov/OSCAL/reference/latest/system-security-plan/json-reference/#/system-security-plan/back-matter/resources/rlinks/media-type), so long as a `@media-type` is in IANA Media Type Registry. This registry is large, and the quanity of registered file types, if exhaustive checking is required, will be onerous. Supporting all media types has limited benefits for the long tail of registered but obscure formats that FedRAMP will not encounter and are still opaque. They are not XML and cannot be analyzed, only checked or their existence.
 
 ## Decision
 
@@ -25,9 +25,39 @@ The 10x ASAP Team will validate attached documents, but do so as minimally as po
   - One `oscal:base64` defined
   - One `oscal:rlink` defined
   - Both a `oscal:base64` and a `oscal:rlink` defined
-  - For a `oscal:base64` its `text()`, validations will check only for [the existence of the base64-encoded content](https://datatracker.ietf.org/doc/html/rfc4648#page-5) via regular expression patterns, not the content itself
-  - For a `oscal:rlink` validations will check only for the existence of a non-empty, well-formed `@href` reference, not for the existence of the data at that location itself
+  - For a `oscal:base64` and its `./text()`, validations will check only for [the existence of the base64-encoded content](https://datatracker.ietf.org/doc/html/rfc4648#page-5) via regular expression patterns, not the analyze or process the content itself
+  - For a `oscal:rlink` validations will check only for the existence of a non-empty, well-formed `./@href` reference, not for the existence of the data at that location itself after resolving the resource URI
 
 For attachments, the FedRAMP validations will only support the IANA media-types for an OSCAL `@media-type` defined below:
 
+- `application/gzip`
+- `application/msword`
+- `application/octet-stream` (NOTE: Used for a variety of binary formats, often ZIP archives.)
+- `application/pdf`
+- `application/vnd.ms-excel`
+- `application/vnd.ms-works`
+- `application/vnd.oasis.opendocument.graphics`
+- `application/vnd.oasis.opendocument.presentation`
+- `application/vnd.oasis.opendocument.spreadsheet`
+- `application/vnd.oasis.opendocument.text`
+- `application/vnd.openxmlformats-officedocument.presentationml.presentation`
+- `application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`
+- `application/vnd.openxmlformats-officedocument.wordprocessingml.document`
+- `application/x-bzip`
+- `application/x-bzip2`
+- `application/x-tar`
+- `application/zip`
+- `image/bmp`
+- `image/jpeg` (NOTE: [Not standard, but very frequently used](https://stackoverflow.com/a/54488403))
+- `image/png`
+- `image/tiff`
+- `image/webp`
+- `image/svg+xml`
+- `text/csv`
+- `text/html`
+- `text/plain`
 ## Consequences
+- 10x ASAP Team will focus on minimal validation of content and defer that work to either:
+  - Advanced validation processing done without XSLT, potentially to be later integrated into this work through an interface
+  - Manual staff review, as the majority of documents are free-form policy documents without OSCAL or other structured models; structured validation is superfluous and needlessly complex when manual review is still required
+- 10x ASAP Team will limit and constrain the type of attachment files accepted to the benefit of standardization for the FedRAMP program overall.
