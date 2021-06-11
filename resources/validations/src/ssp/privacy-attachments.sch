@@ -43,19 +43,11 @@
                 name="poc-uuid"
                 value="/oscal:system-security-plan/oscal:metadata/oscal:responsible-party[@role-id = 'privacy-poc']/oscal:party-uuid" />
 
-            <!-- sanity check -->
-            <sch:report
-                id="has-privacy-poc-info"
-                role="information"
-                test="/oscal:system-security-plan/oscal:metadata/oscal:party[@uuid = $poc-uuid]">Privacy Point of Contact: <sch:value-of
-                    select="$poc-uuid" /></sch:report>
-
             <sch:assert
                 id="has-privacy-poc"
                 role="error"
                 test="/oscal:system-security-plan/oscal:metadata/oscal:party[@uuid = $poc-uuid]">A FedRAMP OSCAL SSP must define a Privacy Point of
                 Contact</sch:assert>
-
 
         </sch:rule>
 
@@ -63,9 +55,9 @@
 
     <sch:pattern>
 
-        <!-- The "PTA" appears to be just a few questions, not an attachment -->
-
         <sch:title>A FedRAMP OSCAL SSP may need to incorporate a PIA and possibly a SORN</sch:title>
+
+        <!-- The "PTA" appears to be just a few questions, not an attachment -->
 
         <sch:rule
             context="oscal:prop[@name = 'privacy-sensitive'] | oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @class = 'pta' and matches(@name, '^pta-\d$')]"
@@ -111,11 +103,21 @@
                 #4.</sch:assert>
 
             <sch:assert
+                id="has-all-pta-questions"
                 test="
                     every $name in ('pta-1', 'pta-2', 'pta-3', 'pta-4')
                         satisfies
                         exists(oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @class = 'pta' and @name = $name])
                     ">One or more of the four PTA questions is missing</sch:assert>
+
+            <sch:assert
+                id="has-correct-pta-question-cardinality"
+                test="
+                    not(some $name in ('pta-1', 'pta-2', 'pta-3', 'pta-4')
+                        satisfies
+                        exists(oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @class = 'pta' and @name = $name][2])
+                    )
+                    ">One or more of the four PTA questions is a duplicate</sch:assert>
 
         </sch:rule>
 
@@ -139,20 +141,14 @@
             see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 51">
 
             <sch:assert
-                id="has-pta"
+                id="has-pia"
                 role="error"
                 test="
-                    some $answer in oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @class = 'pta' and matches(@name, '^pta-\d$')]
-                        satisfies $answer = 'yes'
-                        and
-                        oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'pia']] (: a PIA is attached :)
-                    ">A FedRAMP OSCAL SSP must incorporate a Privacy Impact Analysis</sch:assert>
-
-            <sch:report
-                id="pta-resource"
-                role="information"
-                test="true()">Privacy Impact Analysis uuid: <sch:value-of
-                    select="oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'pia']]/@uuid" /></sch:report>
+                    (: every $answer in oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @class = 'pta' and matches(@name, '^pta-\d$')]
+                        satisfies $answer = 'no'
+                        or :)
+                    oscal:resource[oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type' and @value = 'pia']] (: a PIA is attached :)
+                    ">This FedRAMP OSCAL SSP must incorporate a Privacy Impact Analysis</sch:assert>
 
         </sch:rule>
     </sch:pattern>
