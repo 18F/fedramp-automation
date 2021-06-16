@@ -631,7 +631,7 @@
         </x:scenario>
         <x:scenario
             label="when the Privacy Impact Assessment">
-            <x:scenario
+            <!--<x:scenario
                 label="is not necessary">
                 <x:context>
                     <system-security-plan
@@ -660,21 +660,13 @@
                                     value="no" />
                             </system-information>
                         </system-characteristics>
-                        <back-matter>
-                            <!--<resource
-                                uuid="fab59751-b855-40cb-93c1-492562e20e18">
-                                <prop
-                                    name="type"
-                                    ns="https://fedramp.gov/ns/oscal"
-                                    value="pia" />
-                            </resource>-->
-                        </back-matter>
+                        <back-matter />
                     </system-security-plan>
                 </x:context>
                 <x:expect-not-assert
                     id="has-pia"
                     label="it need not be provided" />
-            </x:scenario>
+            </x:scenario>-->
             <x:scenario
                 label="is declared">
                 <x:context>
@@ -749,13 +741,13 @@
                             </system-information>
                         </system-characteristics>
                         <back-matter>
-                            <!--<resource
+                            <resource
                                 uuid="fab59751-b855-40cb-93c1-492562e20e18">
                                 <prop
                                     name="type"
                                     ns="https://fedramp.gov/ns/oscal"
                                     value="not-a-pia" />
-                            </resource>-->
+                            </resource>
                         </back-matter>
                     </system-security-plan>
                 </x:context>
