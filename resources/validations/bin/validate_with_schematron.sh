@@ -130,6 +130,15 @@ for qualifiedSchematronName in "${SCHEMA_LOCATION_DIR}"/*.sch; do
     # compute name without .sch
     schematronName=${qualifiedSchematronName##*/}
     schematronRoot=${schematronName%.*}
+    
+    # Step 0
+    rm "${SCHEMA_LOCATION_DIR}"/ssp/*.sch-fragment.xml
+    for sch in "${SCHEMA_LOCATION_DIR}"/ssp/*.sch; do \
+        java -cp "${SAXON_CP}" net.sf.saxon.Transform \
+            -xsl:src/fragment-sch.xsl \
+            -s:$sch \
+            -o:$sch-fragment.xml
+    done
 
     # See pipeline steps 1-4 for further details.
     # github.com/Schematron/schematron/blob/72f7f7c9c46236f073bc59b60869b79528890fd0/trunk/schematron/code/readme.txt
