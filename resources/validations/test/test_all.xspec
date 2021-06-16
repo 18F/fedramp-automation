@@ -1,6 +1,5 @@
 <x:description schematron="../src/ssp.sch"
                xmlns:x="http://www.jenitennison.com/xslt/xspec">
     <x:import href="ssp.xspec" />
-    <x:import href="policy-and-procedure.xspec"/>
-    <x:import href="privacy-attachments.xspec"/>
+    <x:import href="composite.xspec" />
 </x:description>
