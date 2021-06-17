@@ -47,16 +47,16 @@
     <!--pattern from file:/Users/gapinski/Projects/github/18F/fedramp-automation/resources/validations/src/ssp/attachments-general.sch-->
     <sch:pattern>
         <!-- gratuitous warnings off by default -->
-        <sch:let
+        <!--<sch:let
             name="WARNING"
-            value="false()" />
+            value="false()" />-->
         <!-- gratuitous info off by default -->
-        <sch:let
+        <!--<sch:let
             name="INFO"
-            value="false()" />
+            value="false()" />-->
         <sch:let
             name="attachment-types"
-            value="doc('file:../../../xml/fedramp_values.xml')//f:value-set[@name = 'attachment-type']//f:enum/@value" />
+            value="doc('file:../../xml/fedramp_values.xml')//f:value-set[@name = 'attachment-type']//f:enum/@value" />
         <sch:rule
             context="/oscal:system-security-plan/oscal:back-matter">
             <sch:p>It seems unlikely that most if not all SSP resources require a FedRAMP-specific prop.</sch:p>
@@ -75,7 +75,7 @@
             <!-- the following assertion recapitulates the XML Schema constraint -->
             <sch:assert
                 role="error"
-                test="@uuid">A &lt; <sch:name />&gt; element must have a uuid attribute</sch:assert>
+                test="@uuid">A &lt;<sch:name />&gt; element must have a uuid attribute</sch:assert>
             <!--<sch:assert
                 role="error"
                 test="oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'type']">&lt;<sch:name/> uuid="<sch:value-of
@@ -93,7 +93,7 @@
             <sch:assert
                 id="resource-is-referenced"
                 role="info"
-                test="$INFO and @uuid = (//@href[matches(., '^#')] ! substring-after(., '#'))">
+                test="@uuid = (//@href[matches(., '^#')] ! substring-after(., '#'))">
                 <sch:value-of
                     select="$path" />has no reference within the document</sch:assert>
         </sch:rule>
@@ -474,7 +474,7 @@
 
         <sch:let
             name="fedramp-values"
-            value="doc('file:../../../xml/fedramp_values.xml')" />
+            value="doc('file:../../xml/fedramp_values.xml')" />
 
         <sch:title>A FedRAMP OSCAL SSP must specify system inventory items</sch:title>
 
@@ -905,7 +905,7 @@
 
             <sch:let
                 name="security-sensitivity-levels"
-                value="doc('../../../xml/fedramp-values.xml')//fedramp:value-set[@name = 'security-sensitivity-level']//fedramp:enum/@value" />
+                value="doc('../../xml/fedramp-values.xml')//fedramp:value-set[@name = 'security-sensitivity-level']//fedramp:enum/@value" />
 
             <sch:assert
                 test="oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'security-sensitivity-level' and @value = $security-sensitivity-levels]">Missing
@@ -921,7 +921,7 @@
 
             <sch:let
                 name="information-types"
-                value="doc('file:../../../xml/information-types.xml')" />
+                value="doc('file:../../xml/information-types.xml')" />
 
             <!-- note the variant namespace and associated prefix -->
             <sch:assert
