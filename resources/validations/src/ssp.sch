@@ -15,6 +15,36 @@
     <sch:ns prefix="lv"
             uri="local-validations" />
     <doc:xspec href="../test/ssp.xspec" />
+    <sch:phase id="Phase2">
+        <sch:active pattern="phase2" />
+    </sch:phase>
+    <sch:phase id="Phase3">
+        <sch:active pattern="resource" />
+        <sch:active pattern="base64" />
+        <sch:active pattern="required-attachments" />
+        <sch:active pattern="policy-and-procedure" />
+        <sch:active pattern="privacy" />
+        <sch:active pattern="fips-140" />
+        <sch:active pattern="fips-199" />
+        <sch:active pattern="sp800-60" />
+        <sch:active pattern="sp800-63" />
+        <sch:active pattern="inventory" />
+        <sch:active pattern="system-implementation" />
+        <sch:active pattern="general-roles" />
+        <sch:active pattern="implementation-roles" />
+        <sch:active pattern="user-properties" />
+    </sch:phase>
+    <sch:phase id="attachments">
+        <sch:active pattern="resource" />
+        <sch:active pattern="base64" />
+        <sch:active pattern="required-attachments" />
+        <sch:active pattern="policy-and-procedure" />
+    </sch:phase>
+    <sch:phase id="roles">
+        <sch:active pattern="general-roles" />
+        <sch:active pattern="implementation-roles" />
+        <sch:active pattern="user-properties" />
+    </sch:phase>
     <sch:title>FedRAMP System Security Plan Validations</sch:title>
     <xsl:output encoding="UTF-8"
                 indent="yes"
@@ -212,7 +242,7 @@
             <xsl:value-of select="current()/text()" />, so analysis could be inaccurate or it completely failed.</xsl:for-each>
         </xsl:if></xsl:value-of>
     </xsl:template>
-    <sch:pattern>
+    <sch:pattern id="phase2">
         <sch:rule context="/o:system-security-plan">
             <sch:let name="ok-values"
                      value="$registry/f:fedramp-values/f:value-set[@name = 'security-sensitivity-level']" />
@@ -289,6 +319,15 @@
                         test="count($results/errors/error) = 0">
             <sch:value-of select="$results =&gt; lv:report() =&gt; normalize-space()" />.</sch:report>
         </sch:rule>
+        <sch:rule context="/o:system-security-plan">
+            <sch:let name="implemented"
+                     value="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement" />
+            <sch:report id="implemented-response-points"
+                        role="information"
+                        test="true()">[Section C Check 2] This SSP has implemented a statement for each of the following lettered response points for
+                        required controls: 
+            <sch:value-of select="$implemented/@statement-id" />.</sch:report>
+        </sch:rule>
         <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement">
             <sch:let name="sensitivity-level"
                      value="/ =&gt; lv:sensitivity-level() =&gt; lv:if-empty-default('')" />
@@ -301,26 +340,26 @@
             <sch:let name="corrections"
                      value="lv:correct($registry/f:fedramp-values/f:value-set[@name = 'control-implementation-status'], $status)" />
             <sch:let name="required-response-points"
-                     value="$selected-profile/o:catalog//o:part[@name = 'item']" />
-            <sch:let name="implemented"
-                     value="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement" />
-            <sch:let name="missing"
-                     value="$required-response-points[not(@id = $implemented/@statement-id)]" />
+                     value="$selected-profile/o:catalog//o:control[@id = current()/@control-id]//o:part[@name = 'item'][o:prop[@ns = 'https://fedramp.gov/ns/oscal' and @name = 'response-point']]" />
             <sch:assert diagnostics="invalid-implementation-status-diagnostic"
                         doc:organizational-id="section-c.2"
                         id="invalid-implementation-status"
                         role="error"
                         test="not(exists($corrections))">[Section C Check 2] Implementation status is correct.</sch:assert>
-            <sch:report id="implemented-response-points"
-                        role="information"
-                        test="exists($implemented)">[Section C Check 2] This SSP has implemented a statement for each of the following lettered
-                        response points for required controls: 
-            <sch:value-of select="$implemented/@statement-id" />.</sch:report>
+            <sch:report role="information"
+                        test="false()">There are 
+            <sch:value-of select="count($required-response-points)" />required response points for control 
+            <sch:value-of select="@control-id" />: 
+            <sch:value-of select="string-join($required-response-points/@id, ', ')" />.</sch:report>
             <sch:assert diagnostics="missing-response-points-diagnostic"
                         doc:organizational-id="section-c.2"
                         id="missing-response-points"
                         role="error"
-                        test="not(exists($missing))">[Section C Check 2] This SSP has required response points.</sch:assert>
+                        test="
+                    count($required-response-points) eq 0 or
+                    (every $rp in $required-response-points
+                        satisfies exists(current()/descendant::o:part[@id = $rp/@id]))">[Section C Check 2] Every implemented-requirement has required
+response points.</sch:assert>
         </sch:rule>
         <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement">
             <sch:let name="required-components-count"
@@ -462,7 +501,7 @@
              value="doc(concat($registry-base-path, '/fedramp_values.xml'))" />
     <!-- ↑ stage 2 content ↑ -->
     <!-- ↓ stage 3 content ↓ -->
-    <sch:pattern>
+    <sch:pattern id="resource">
         <sch:title>Basic resource constraints</sch:title>
         <sch:let name="attachment-types"
                  value="$fedramp-values//fedramp:value-set[@name = 'attachment-type']//fedramp:enum/@value" />
@@ -517,7 +556,7 @@
                         test="@media-type = $media-types">A media-type attribute must have an allowed value.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern>
+    <sch:pattern id="base64">
         <sch:title>base64 attachments</sch:title>
         <sch:rule context="oscal:back-matter/oscal:resource">
             <sch:assert diagnostics="resource-has-base64-diagnostic"
@@ -546,7 +585,7 @@
             <!-- FYI: http://expath.org/spec/binary#decode-string handles base64 but Saxon-PE or higher is necessary -->
         </sch:rule>
     </sch:pattern>
-    <sch:pattern>
+    <sch:pattern id="required-attachments">
         <sch:title>Constraints for specific attachments</sch:title>
         <sch:rule context="oscal:back-matter"
                   see="https://github.com/18F/fedramp-automation/blob/master/documents/Guide_to_OSCAL-based_FedRAMP_System_Security_Plans_(SSP).pdf">
@@ -604,7 +643,7 @@
                         [Section B Check 3.11] A FedRAMP OSCAL SSP must have a Separation of Duties Matrix attached.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern>
+    <sch:pattern id="policy-and-procedure">
         <sch:title>Policy and Procedure attachments</sch:title>
         <sch:title>A FedRAMP SSP must incorporate one policy document and one procedure document for each of the 17 NIST SP 800-54 Revision 4 control
         families</sch:title>
@@ -657,7 +696,7 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
             [Section B Check 3.1] Policy and procedure documents must have unique per-control-family associations.</sch:report>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern>
+    <sch:pattern id="privacy">
         <sch:title>A FedRAMP OSCAL SSP must specify a Privacy Point of Contact</sch:title>
         <sch:rule context="oscal:metadata"
                   see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 49">
@@ -685,8 +724,6 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
                         test="/oscal:system-security-plan/oscal:metadata/oscal:party[@uuid = $poc-uuid]">[Section B Check 3.4] A FedRAMP OSCAL SSP
                         must define a Privacy Point of Contact.</sch:assert>
         </sch:rule>
-    </sch:pattern>
-    <sch:pattern>
         <sch:title>A FedRAMP OSCAL SSP may need to incorporate a PIA and possibly a SORN</sch:title>
         <!-- The "PTA" appears to be just a few questions, not an attachment -->
         <sch:rule context="oscal:prop[@name = 'privacy-sensitive'] | oscal:prop[@ns = 'https://fedramp.gov/ns/oscal' and @class = 'pta' and matches(@name, '^pta-\d$')]"
@@ -762,7 +799,8 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
             [Section B Check 3.4] This FedRAMP OSCAL SSP must incorporate a Privacy Impact Analysis.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 58">
+    <sch:pattern id="fips-140"
+                 see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 58">
         <!-- FIXME: Draft guide is wildly different than template -->
         <sch:title>FIPS 140 Validation</sch:title>
         <sch:rule context="oscal:system-implementation">
@@ -808,8 +846,9 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
                         validation-details link must be in accord with its sibling validation-reference.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern see="https://github.com/18F/fedramp-automation/blob/master/documents/Guide_to_OSCAL-based_FedRAMP_System_Security_Plans_(SSP).pdf page 12">
-
+    <sch:pattern id="fips-199"
+                 see="https://github.com/18F/fedramp-automation/blob/master/documents/Guide_to_OSCAL-based_FedRAMP_System_Security_Plans_(SSP).pdf page 12">
+                 
         <sch:title>Security Objectives Categorization (FIPS 199)</sch:title>
         <sch:rule context="oscal:system-characteristics">
             <!-- These should also be asserted in XML Schema -->
@@ -868,8 +907,9 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
                         value.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern see="https://github.com/18F/fedramp-automation/blob/master/documents/Guide_to_OSCAL-based_FedRAMP_System_Security_Plans_(SSP).pdf page 11">
-
+    <sch:pattern id="sp800-60"
+                 see="https://github.com/18F/fedramp-automation/blob/master/documents/Guide_to_OSCAL-based_FedRAMP_System_Security_Plans_(SSP).pdf page 11">
+                 
         <sch:title>SP 800-60v2r1 Information Types:</sch:title>
         <sch:rule context="oscal:system-information">
             <sch:assert diagnostics="system-information-has-information-type-diagnostic"
@@ -953,7 +993,8 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
                         select element must have an approved value.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 13">
+    <sch:pattern id="sp800-63"
+                 see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 13">
         <sch:title>Digital Identity Determination</sch:title>
         <sch:rule context="oscal:system-characteristics">
             <sch:assert diagnostics="has-security-eauth-level-diagnostic"
@@ -1024,7 +1065,7 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
                         Identity Determination federation-assurance-level property.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern>
+    <sch:pattern id="inventory">
         <sch:title>A FedRAMP OSCAL SSP must specify system inventory items</sch:title>
         <sch:rule context="/oscal:system-security-plan/oscal:system-implementation"
                   see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans pp52-60">
@@ -1249,7 +1290,7 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
                         test="oscal:prop[@name = 'asset-type']">A component must have one asset type.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern>
+    <sch:pattern id="system-implementation">
         <sch:rule context="oscal:system-implementation"
                   see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans page 62">
             <sch:assert diagnostics="has-system-component-diagnostic"
@@ -1502,9 +1543,10 @@ system-implementation user assembly.</sch:assert>
         <sch:value-of select="$corrections" />.</sch:diagnostic>
         <sch:diagnostic doc:assertion="missing-response-points"
                         doc:context="/o:system-security-plan/o:control-implementation/o:implemented-requirement"
-                        id="missing-response-points-diagnostic">[Section C Check 2] This SSP has not implemented a statement for each of the
-                        following lettered response points for required controls: 
-        <sch:value-of select="$missing/@id" />.</sch:diagnostic>
+                        id="missing-response-points-diagnostic">[Section C Check 2] This implemented-requirement is missing a statement for one of
+                        the following lettered response points: 
+        <sch:value-of select="string-join($required-response-points/@id, ', ')" />- the statements provided were 
+        <sch:value-of select="string-join(current()/oscal:statement/@statement-id,', ')" />.</sch:diagnostic>
         <sch:diagnostic doc:assertion="missing-response-components"
                         doc:context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement"
                         id="missing-response-components-diagnostic">[Section D Checks] Response statements for 
