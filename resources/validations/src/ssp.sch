@@ -324,8 +324,8 @@
                      value="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement" />
             <sch:report id="implemented-response-points"
                         role="information"
-                        test="true()">[Section C Check 2] This SSP has implemented a statement for each of the following lettered response points for
-                        required controls: 
+                        test="count($implemented) gt 0">[Section C Check 2] This SSP has implemented a statement for each of the following <sch:value-of select="count($implemented)"/> lettered response
+                        points for required controls: 
             <sch:value-of select="$implemented/@statement-id" />.</sch:report>
         </sch:rule>
         <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement">
@@ -358,8 +358,8 @@
                         test="
                     count($required-response-points) eq 0 or
                     (every $rp in $required-response-points
-                        satisfies exists(current()/descendant::o:part[@id = $rp/@id]))">[Section C Check 2] Every implemented-requirement has required
-response points.</sch:assert>
+                        satisfies exists(current()/descendant::o:part[@id = $rp/@id]))">[Section C Check 2] Every implemented-requirement must have
+required response points.</sch:assert>
         </sch:rule>
         <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement">
             <sch:let name="required-components-count"
@@ -1543,10 +1543,10 @@ system-implementation user assembly.</sch:assert>
         <sch:value-of select="$corrections" />.</sch:diagnostic>
         <sch:diagnostic doc:assertion="missing-response-points"
                         doc:context="/o:system-security-plan/o:control-implementation/o:implemented-requirement"
-                        id="missing-response-points-diagnostic">[Section C Check 2] This implemented-requirement is missing a statement for one of
-                        the following lettered response points: 
+                        id="missing-response-points-diagnostic">This implemented-requirement is missing a statement for one of the following lettered
+                        response points: 
         <sch:value-of select="string-join($required-response-points/@id, ', ')" />- the statements provided were 
-        <sch:value-of select="string-join(current()/oscal:statement/@statement-id,', ')" />.</sch:diagnostic>
+        <sch:value-of select="string-join(current()/oscal:statement/@statement-id, ', ')" />.</sch:diagnostic>
         <sch:diagnostic doc:assertion="missing-response-components"
                         doc:context="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement"
                         id="missing-response-components-diagnostic">[Section D Checks] Response statements for 
