@@ -108,12 +108,6 @@
                   name="lv:profile">
         <xsl:param name="level" />
         <xsl:variable name="profile-map">
-            <!-- 
-            OSCAL releases are tagged, but updates from OSCAL CI/CD pipeline to
-            github.com/usnistgov/oscal-content are not. The 0f78f05 commit is the
-            most recent triggered by the OSCAL 1.0.0-rc1 release. Change this url
-            accordingly if you know what you are doing.
-            -->
             <profile href="{concat($baselines-base-path, '/FedRAMP_rev4_LOW-baseline-resolved-profile_catalog.xml')}"
                      level="low" />
             <profile href="{concat($baselines-base-path, '/FedRAMP_rev4_MODERATE-baseline-resolved-profile_catalog.xml')}"
@@ -245,7 +239,7 @@
     <sch:pattern id="phase2">
         <sch:rule context="/o:system-security-plan">
             <sch:let name="ok-values"
-                     value="$registry/f:fedramp-values/f:value-set[@name = 'security-sensitivity-level']" />
+                     value="$registry/f:fedramp-values/f:value-set[@name = 'security-level']" />
             <sch:let name="sensitivity-level"
                      value="/ =&gt; lv:sensitivity-level() =&gt; lv:if-empty-default('')" />
             <sch:let name="corrections"
@@ -985,7 +979,7 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
         </sch:rule>
         <sch:rule context="oscal:base | oscal:selected">
             <sch:let name="fips-199-levels"
-                     value="$fedramp-values//fedramp:value-set[@name = 'security-impact-level']//fedramp:enum/@value" />
+                     value="$fedramp-values//fedramp:value-set[@name = 'security-level']//fedramp:enum/@value" />
             <sch:assert diagnostics="cia-impact-has-approved-fips-categorization-diagnostic"
                         id="cia-impact-has-approved-fips-categorization"
                         role="error"
