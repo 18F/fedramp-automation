@@ -318,8 +318,8 @@
                      value="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement" />
             <sch:report id="implemented-response-points"
                         role="information"
-                        test="count($implemented) gt 0">[Section C Check 2] This SSP has implemented a statement for each of the following <sch:value-of select="count($implemented)" /> lettered response
-                        points for required controls: 
+                        test="count($implemented) gt 0">[Section C Check 2] This SSP has implemented a statement for each of the following 
+            <sch:value-of select="count($implemented)" />lettered response points for required controls: 
             <sch:value-of select="$implemented/@statement-id" />.</sch:report>
         </sch:rule>
         <sch:rule context="/o:system-security-plan/o:control-implementation/o:implemented-requirement">
@@ -1418,10 +1418,10 @@ system-implementation user assembly.</sch:assert>
                         id="user-has-user-type"
                         role="error"
                         test="oscal:prop[@name = 'type']">Every user has a user type property.</sch:assert>
-            <sch:assert diagnostics="user-has-privilege-type-diagnostic"
-                        id="user-has-privilege-type"
+            <sch:assert diagnostics="user-has-privilege-level-diagnostic"
+                        id="user-has-privilege-level"
                         role="error"
-                        test="oscal:prop[@name = 'privilege-type']">Every user has a privilege type property.</sch:assert>
+                        test="oscal:prop[@name = 'privilege-level']">Every user has a privilege type property.</sch:assert>
             <sch:assert diagnostics="user-has-sensitivity-level-diagnostic"
                         id="user-has-sensitivity-level"
                         role="error"
@@ -1447,13 +1447,13 @@ system-implementation user assembly.</sch:assert>
                         role="error"
                         test="current()/@value = $user-types">User type property has an allowed value.</sch:assert>
         </sch:rule>
-        <sch:rule context="oscal:user/oscal:prop[@name = 'privilege-type']">
-            <sch:let name="user-privilege-types"
+        <sch:rule context="oscal:user/oscal:prop[@name = 'privilege-level']">
+            <sch:let name="user-privilege-levels"
                      value="$fedramp-values//fedramp:value-set[@name = 'user-privilege']//fedramp:enum/@value" />
-            <sch:assert diagnostics="user-privilege-type-has-allowed-value-diagnostic"
-                        id="user-privilege-type-has-allowed-value"
+            <sch:assert diagnostics="user-privilege-level-has-allowed-value-diagnostic"
+                        id="user-privilege-level-has-allowed-value"
                         role="error"
-                        test="current()/@value = $user-privilege-types">User privilege type property has an allowed value.</sch:assert>
+                        test="current()/@value = $user-privilege-levels">User privilege type property has an allowed value.</sch:assert>
         </sch:rule>
         <sch:rule context="oscal:user/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal'][@name = 'sensitivity']">
             <sch:let name="user-sensitivity-levels"
@@ -2141,9 +2141,9 @@ system-implementation user assembly.</sch:assert>
         <sch:diagnostic doc:assertion="user-has-user-type"
                         doc:context="oscal:user"
                         id="user-has-user-type-diagnostic">Every user has a user type property.</sch:diagnostic>
-        <sch:diagnostic doc:assertion="user-has-privilege-type"
+        <sch:diagnostic doc:assertion="user-has-privilege-level"
                         doc:context="oscal:user"
-                        id="user-has-privilege-type-diagnostic">Every user has a privilege type property.</sch:diagnostic>
+                        id="user-has-privilege-level-diagnostic">Every user has a privilege type property.</sch:diagnostic>
         <sch:diagnostic doc:assertion="user-has-sensitivity-level"
                         doc:context="oscal:user"
                         id="user-has-sensitivity-level-diagnostic">Every user has a sensitivity level property.</sch:diagnostic>
@@ -2153,9 +2153,9 @@ system-implementation user assembly.</sch:assert>
         <sch:diagnostic doc:assertion="user-user-type-has-allowed-value"
                         doc:context="oscal:user/oscal:prop[@name = 'type']"
                         id="user-user-type-has-allowed-value-diagnostic">User type property has an allowed value.</sch:diagnostic>
-        <sch:diagnostic doc:assertion="user-privilege-type-has-allowed-value"
-                        doc:context="oscal:user/oscal:prop[@name = 'privilege-type']"
-                        id="user-privilege-type-has-allowed-value-diagnostic">User privilege type property has an allowed value.</sch:diagnostic>
+        <sch:diagnostic doc:assertion="user-privilege-level-has-allowed-value"
+                        doc:context="oscal:user/oscal:prop[@name = 'privilege-level']"
+                        id="user-privilege-level-has-allowed-value-diagnostic">User privilege type property has an allowed value.</sch:diagnostic>
         <sch:diagnostic doc:assertion="user-sensitivity-level-has-allowed-value"
                         doc:context="oscal:user/oscal:prop[@ns = 'https://fedramp.gov/ns/oscal'][@name = 'sensitivity']"
                         id="user-sensitivity-level-has-allowed-value-diagnostic">User sensitivity level property has an allowed
