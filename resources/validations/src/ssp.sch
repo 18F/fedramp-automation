@@ -28,7 +28,7 @@
         <sch:active pattern="fips-199" />
         <sch:active pattern="sp800-60" />
         <sch:active pattern="sp800-63" />
-        <sch:active pattern="inventory" />
+        <sch:active pattern="system-inventory" />
         <sch:active pattern="system-implementation" />
         <sch:active pattern="general-roles" />
         <sch:active pattern="implementation-roles" />
@@ -318,7 +318,7 @@
                      value="/o:system-security-plan/o:control-implementation/o:implemented-requirement/o:statement" />
             <sch:report id="implemented-response-points"
                         role="information"
-                        test="count($implemented) gt 0">[Section C Check 2] This SSP has implemented a statement for each of the following <sch:value-of select="count($implemented)"/> lettered response
+                        test="count($implemented) gt 0">[Section C Check 2] This SSP has implemented a statement for each of the following <sch:value-of select="count($implemented)" /> lettered response
                         points for required controls: 
             <sch:value-of select="$implemented/@statement-id" />.</sch:report>
         </sch:rule>
@@ -1059,7 +1059,9 @@ A FedRAMP SSP must incorporate a procedure document for each of the 17 NIST SP 8
                         Identity Determination federation-assurance-level property.</sch:assert>
         </sch:rule>
     </sch:pattern>
-    <sch:pattern id="inventory">
+    <sch:pattern id="system-inventory"
+                 see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans pp52-60">
+        <sch:title>FedRAMP OSCAL System Inventory</sch:title>
         <sch:title>A FedRAMP OSCAL SSP must specify system inventory items</sch:title>
         <sch:rule context="/oscal:system-security-plan/oscal:system-implementation"
                   see="DRAFT Guide to OSCAL-based FedRAMP System Security Plans pp52-60">

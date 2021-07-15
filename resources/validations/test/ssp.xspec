@@ -408,7 +408,7 @@
                             </system-security-plan>
                         </x:context>
                         <x:expect-not-report id="implemented-response-points"
-                                         label="those defined are validated." />
+                                             label="those defined are validated." />
                         <x:expect-assert id="missing-response-points"
                                          label="it generates an error because missing response points are invalid."
                                          role="error" />
@@ -5062,7 +5062,7 @@
                         <user uuid="8c546631-d442-4f7d-b309-4c5af10871da">
                             <prop name="type"
                                   value="internal" />
-                            <prop name="privilege-type"
+                            <prop name="privilege-level"
                                   value="privileged" />
                             <prop name="sensitivity"
                                   ns="https://fedramp.gov/ns/oscal"
@@ -5088,9 +5088,9 @@
                                          label="that is correct." />
                 </x:scenario>
             </x:scenario>
-            <x:scenario label="Every user has a privilege type property.">
+            <x:scenario label="Every user has a privilege level property.">
                 <x:scenario label="When that is true">
-                    <x:expect-not-assert id="user-has-privilege-type"
+                    <x:expect-not-assert id="user-has-privilege-level"
                                          label="that is correct." />
                 </x:scenario>
             </x:scenario>
@@ -5118,9 +5118,9 @@
                                          label="that is correct." />
                 </x:scenario>
             </x:scenario>
-            <x:scenario label="User privilege type property has an allowed value.">
+            <x:scenario label="User privilege level property has an allowed value.">
                 <x:scenario label="When that is true">
-                    <x:expect-not-assert id="user-privilege-type-has-allowed-value"
+                    <x:expect-not-assert id="user-privilege-level-has-allowed-value"
                                          label="that is correct." />
                 </x:scenario>
             </x:scenario>
@@ -5167,7 +5167,7 @@
                         <user uuid="8c546631-d442-4f7d-b309-4c5af10871da">
                             <prop name="type"
                                   value="internal" />
-                            <prop name="privilege-type"
+                            <prop name="privilege-level"
                                   value="privileged" />
                             <prop name="sensitivity"
                                   ns="https://fedramp.gov/ns/oscal"
@@ -5203,14 +5203,14 @@
                                      label="that is an error." />
                 </x:scenario>
             </x:scenario>
-            <x:scenario label="Every user has a privilege type property.">
+            <x:scenario label="Every user has a privilege level property.">
                 <x:context>
                     <ssp xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                         <user uuid="8c546631-d442-4f7d-b309-4c5af10871da" />
                     </ssp>
                 </x:context>
                 <x:scenario label="When that is false">
-                    <x:expect-assert id="user-has-privilege-type"
+                    <x:expect-assert id="user-has-privilege-level"
                                      label="that is an error." />
                 </x:scenario>
             </x:scenario>
@@ -5263,17 +5263,17 @@
                                      label="that is an error." />
                 </x:scenario>
             </x:scenario>
-            <x:scenario label="User privilege type property has an allowed value.">
+            <x:scenario label="User privilege level property has an allowed value.">
                 <x:context>
                     <ssp xmlns="http://csrc.nist.gov/ns/oscal/1.0">
                         <user uuid="8c546631-d442-4f7d-b309-4c5af10871da">
-                            <prop name="privilege-type"
+                            <prop name="privilege-level"
                                   value="nomenclatura" />
                         </user>
                     </ssp>
                 </x:context>
                 <x:scenario label="When that is false">
-                    <x:expect-assert id="user-privilege-type-has-allowed-value"
+                    <x:expect-assert id="user-privilege-level-has-allowed-value"
                                      label="that is an error." />
                 </x:scenario>
             </x:scenario>
