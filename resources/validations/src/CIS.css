@@ -1,0 +1,122 @@
+aption {
+    font-weight: bold;
+    font-size: large;
+}
+
+thead tr {
+    background-color: #e0e0e0;
+    color: inherit;
+}
+
+thead th {
+    vertical-align: bottom;
+    text-align: left;
+    white-space: normal;
+}
+
+thead td {
+}
+
+tbody tr {
+    vertical-align: top;
+}
+
+tbody th {
+    text-align: left;
+    background-color: #e8e8e8;
+    color: inherit;
+}
+
+tbody tr {
+    background-color: #f0f0f0;
+    color: inherit;
+}
+
+td.c,
+th.c {
+    text-align: center;
+}
+
+
+*[title] {
+    cursor: help;
+}
+
+.count {
+    font-size: x-small;
+}
+
+.remarks {
+    font-size: small;
+}
+
+.missing {
+    background-color: orange;
+}
+
+ul:first-child {
+    margin-top: 0;
+}
+
+details > details {
+    margin-left: 1em;
+}
+details div {
+    margin-top: 0em;
+}
+
+div.statement > div.statement {
+    margin-left: 1em;
+}
+
+.responded,
+.implemented {
+    color: green;
+}
+
+.not-responded,
+.not-implemented {
+    color: red;
+}
+
+.partially-implemented,
+.planned {
+    color: orange;
+}
+
+.implementation-full{
+    color: green;
+}
+.implementation-partial {
+    color: orange;
+}
+.implementation-planned{
+    color: orange;
+}
+.implementation-alternative {
+    color: orange;
+}
+.implementation-not-applicable {
+    color: orange;
+}
+
+.insert {
+    font-style: italic;
+}
+
+.url,
+.version {
+    /*font-family: arial, helvetica, sans-serif;*/
+}
+
+.response-point-stated {
+    color: green;
+}
+.response-point-missing {
+    color: red;
+}
+
+.parameter-constraint {
+    font-variant: small-caps;
+    font-size: x-small;
+}
