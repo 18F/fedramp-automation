@@ -340,7 +340,8 @@
                         id="invalid-implementation-status"
                         role="error"
                         test="not(exists($corrections))">[Section C Check 2] Implementation status is correct.</sch:assert>
-            <sch:report role="information"
+            <sch:report id="report-required-response-points"
+                        role="information"
                         test="false()">There are 
             <sch:value-of select="count($required-response-points)" />required response points for control 
             <sch:value-of select="@control-id" />: 
