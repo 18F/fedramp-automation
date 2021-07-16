@@ -1,67 +1,39 @@
-import {
-  createOvermind,
-  createOvermindMock,
-  derived,
-  IContext,
-} from 'overmind';
-import { merge, namespaced } from 'overmind/config';
+import { createOvermind, createOvermindMock, IContext } from 'overmind';
 
 import * as actions from './actions';
+import type { GetSSPSchematronAssertions } from '../../../use-cases/schematron';
 import type { AnnotateXMLUseCase } from '../../../use-cases/annotate-xml';
 import type {
   ValidateSSPUseCase,
   ValidateSSPUrlUseCase,
 } from '../../../use-cases/validate-ssp-xml';
 
-import * as report from './report';
-import * as router from './router';
+import type { LocationListener } from './router';
+import { state, State, SampleSSP } from './state';
 
 type UseCases = {
   annotateXML: AnnotateXMLUseCase;
+  getSSPSchematronAssertions: GetSSPSchematronAssertions;
   validateSSP: ValidateSSPUseCase;
   validateSSPUrl: ValidateSSPUrlUseCase;
 };
 
-type SampleSSP = {
-  url: string;
-  displayName: string;
-};
-
-type State = {
-  currentRoute: router.Route;
-  baseUrl: string;
-  repositoryUrl?: string;
-  sampleSSPs: SampleSSP[];
-  breadcrumbs: { text: string; selected: boolean; url: string }[];
-};
-
 export const getPresenterConfig = (
-  locationListen: router.LocationListener,
+  locationListen: LocationListener,
   useCases: UseCases,
   initialState: Partial<State> = {},
 ) => {
-  const state: State = {
-    currentRoute: router.Routes.home,
-    baseUrl: '',
-    sampleSSPs: [] as SampleSSP[],
-    ...initialState,
-    breadcrumbs: derived((state: State) =>
-      router.breadcrumbs[state.currentRoute.type](state.currentRoute),
-    ),
-  };
-  return merge(
-    {
-      actions,
-      state,
-      effects: {
-        locationListen,
-        useCases,
-      },
+  return {
+    actions,
+    state: {
+      ...state,
+      ...initialState,
     },
-    namespaced({
-      report: report.getPresenterConfig(),
-    }),
-  );
+    effects: {
+      locationListen,
+      useCases,
+    },
+  };
 };
 export type PresenterConfig = IContext<ReturnType<typeof getPresenterConfig>>;
 
@@ -70,7 +42,7 @@ export type PresenterContext = {
   debug: boolean;
   repositoryUrl: string;
   sampleSSPs: SampleSSP[];
-  locationListen: router.LocationListener;
+  locationListen: LocationListener;
   useCases: UseCases;
 };
 
@@ -100,6 +72,7 @@ const getUseCasesShim = (): UseCases => {
   const stub = jest.fn();
   return {
     annotateXML: stub,
+    getSSPSchematronAssertions: stub,
     validateSSP: stub,
     validateSSPUrl: stub,
   };

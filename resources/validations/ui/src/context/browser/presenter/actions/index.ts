@@ -1,15 +1,25 @@
-import type { PresenterConfig } from '.';
-import * as router from './router';
+export * as schematron from './schematron';
+export * as validator from './validator';
 
-export const onInitializeOvermind = ({ actions, effects }: PresenterConfig) => {
+import type { PresenterConfig } from '..';
+import * as router from '../router';
+
+export const onInitializeOvermind = ({
+  actions,
+  effects,
+  state,
+}: PresenterConfig) => {
   actions.setCurrentRoute(window.location.hash);
-  effects.locationListen(url => {
+  effects.locationListen((url: string) => {
     actions.setCurrentRoute(url);
   });
   window.addEventListener('hashchange', event => {
     const url = event.newURL.split('#')[1];
     actions.setCurrentRoute(url);
   });
+  effects.useCases
+    .getSSPSchematronAssertions()
+    .then(schema => (state.schematron.schematronAsserts = schema));
 };
 
 export const setCurrentRoute = ({ state }: PresenterConfig, url: string) => {

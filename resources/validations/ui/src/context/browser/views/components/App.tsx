@@ -5,13 +5,18 @@ import { Breadcrumbs } from './Breadcrumbs';
 import { Footer } from './Footer';
 import { Header } from './Header';
 import { HomePage } from './HomePage';
+import { SchematronReport } from './SchematronReport';
 import { SummaryPage } from './SummaryPage';
 import { ViewerPage } from './ViewerPage';
 
 const CurrentPage = () => {
   const { currentRoute } = useAppState();
   if (currentRoute.type === 'Home') {
-    return <HomePage />;
+    return (
+      <div>
+        <HomePage />
+      </div>
+    );
   } else if (currentRoute.type === 'Summary') {
     return <SummaryPage />;
   } else if (currentRoute.type === 'Assertion') {

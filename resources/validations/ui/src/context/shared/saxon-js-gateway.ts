@@ -1,22 +1,42 @@
 import type { IndentXml } from '../..//domain/xml';
 import type {
+  ParseSchematronAssertions,
   SchematronValidator,
-  ValidationAssert,
+  FailedAssert,
   ValidationReport,
+  SuccessfulReport,
 } from '../../use-cases/schematron';
 
 const getValidationReport = (
   SaxonJS: any,
   document: DocumentFragment,
 ): ValidationReport => {
-  let failedAsserts = SaxonJS.XPath.evaluate('//svrl:failed-assert', document, {
-    namespaceContext: { svrl: 'http://purl.oclc.org/dsdl/svrl' },
-    resultForm: 'array',
-  });
+  const failedAsserts = SaxonJS.XPath.evaluate(
+    '//svrl:failed-assert',
+    document,
+    {
+      namespaceContext: { svrl: 'http://purl.oclc.org/dsdl/svrl' },
+      resultForm: 'array',
+    },
+  );
+  const successfulReports = SaxonJS.XPath.evaluate(
+    '//svrl:successful-report',
+    document,
+    {
+      namespaceContext: { svrl: 'http://purl.oclc.org/dsdl/svrl' },
+      resultForm: 'array',
+    },
+  );
   return {
     failedAsserts: Array.prototype.map.call(failedAsserts, (assert, index) => {
+      console.log(
+        Array.prototype.map.call(
+          assert.querySelectorAll('diagnostic-reference'),
+          (node: Node) => node.textContent,
+        ),
+      );
       return Object.keys(assert.attributes).reduce(
-        (assertMap: Record<string, ValidationAssert>, key: string) => {
+        (assertMap: Record<string, FailedAssert>, key: string) => {
           const name = assert.attributes[key].name;
           if (name) {
             assertMap[name] = assert.attributes[key].value;
@@ -24,11 +44,33 @@ const getValidationReport = (
           return assertMap;
         },
         {
-          text: assert.textContent,
+          diagnosticReferences: Array.prototype.map.call(
+            assert.querySelectorAll('diagnostic-reference'),
+            (node: Node) => node.textContent,
+          ) as any,
+          text: assert.querySelector('text').textContent,
           uniqueId: `${assert['id']}-${index}` as any,
         },
       );
-    }) as ValidationAssert[],
+    }) as FailedAssert[],
+    successfulReports: Array.prototype.map.call(
+      successfulReports,
+      (report, index) => {
+        return Object.keys(report.attributes).reduce(
+          (assertMap: Record<string, FailedAssert>, key: string) => {
+            const name = report.attributes[key].name;
+            if (name) {
+              assertMap[name] = report.attributes[key].value;
+            }
+            return assertMap;
+          },
+          {
+            text: report.querySelector('text').textContent,
+            uniqueId: `${report['id']}-${index}` as any,
+          },
+        );
+      },
+    ) as SuccessfulReport[],
   };
 };
 
@@ -275,4 +317,24 @@ export const XmlIndenter =
         console.error(error);
         throw new Error(`Error indenting xml: ${error}`);
       });
+  };
+
+export const SchematronParser =
+  (ctx: { SaxonJS: any }): ParseSchematronAssertions =>
+  (schematron: string) => {
+    const document = ctx.SaxonJS.getPlatform().parseXmlFromString(schematron);
+    const asserts = ctx.SaxonJS.XPath.evaluate(
+      '//(sch:report|sch:assert)',
+      document,
+      {
+        namespaceContext: { sch: 'http://purl.oclc.org/dsdl/schematron' },
+        resultForm: 'array',
+      },
+    );
+    return asserts.map((assert: any) => ({
+      id: assert.getAttribute('id'),
+      isReport: assert.nodeName === 'sch:report',
+      message: assert.textContent,
+      role: assert.getAttribute('role'),
+    }));
   };

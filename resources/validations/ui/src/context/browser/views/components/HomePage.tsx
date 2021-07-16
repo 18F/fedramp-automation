@@ -2,13 +2,12 @@ import React from 'react';
 
 import { useActions, useAppState } from '../hooks';
 import { onFileInputChangeGetFile } from '../../util/file-input';
-import { SSPReport } from './SSPReport';
 import { colorTokenForRole } from '../../util/styles';
+import { SchematronReport } from './SchematronReport';
 
 export const HomePage = () => {
-  const state = useAppState();
+  const { sampleSSPs, schematron } = useAppState();
   const actions = useActions();
-  const validatedReport = state.report.matches('VALIDATED');
 
   return (
     <div className="grid-row grid-gap">
@@ -27,24 +26,24 @@ export const HomePage = () => {
           aria-describedby="file-input-specific-hint"
           accept=".xml"
           onChange={onFileInputChangeGetFile(fileDetails => {
-            actions.report.setXmlContents({
+            actions.validator.setXmlContents({
               fileName: fileDetails.name,
               xmlContents: fileDetails.text,
             });
           })}
-          disabled={state.report.current === 'PROCESSING'}
+          disabled={schematron.validator.current === 'PROCESSING'}
         />
         <div className="margin-y-1">
           <div className="usa-hint">
             Or use an example file, brought to you by FedRAMP:
           </div>
           <ul>
-            {state.sampleSSPs.map((sampleSSP, index) => (
+            {sampleSSPs.map((sampleSSP, index) => (
               <li key={index}>
                 <button
                   className="usa-button usa-button--unstyled"
-                  onClick={() => actions.report.setXmlUrl(sampleSSP.url)}
-                  disabled={state.report.current === 'PROCESSING'}
+                  onClick={() => actions.validator.setXmlUrl(sampleSSP.url)}
+                  disabled={schematron.validator.current === 'PROCESSING'}
                 >
                   {sampleSSP.displayName}
                 </button>
@@ -52,7 +51,7 @@ export const HomePage = () => {
             ))}
           </ul>
         </div>
-        {validatedReport && (
+        {
           <form className="usa-form">
             <fieldset className="usa-fieldset">
               <div className="usa-search usa-search--small" role="search">
@@ -85,14 +84,14 @@ export const HomePage = () => {
                       if (event && event.target) {
                         text = event.target.value;
                       }
-                      actions.report.setFilterText(text);
+                      actions.schematron.setFilterText(text);
                     }}
                     placeholder="Search text..."
                   />
                 </div>
               </div>
               <div className="usa-radio">
-                {validatedReport.roles.map((filterRole, index) => (
+                {schematron.roles.map((filterRole, index) => (
                   <div key={index}>
                     <input
                       className="usa-radio__input usa-radio__input--tile"
@@ -100,8 +99,10 @@ export const HomePage = () => {
                       type="radio"
                       name="role"
                       value={filterRole}
-                      checked={validatedReport.filter.role === filterRole}
-                      onChange={() => actions.report.setFilterRole(filterRole)}
+                      checked={schematron.filter.role === filterRole}
+                      onChange={() =>
+                        actions.schematron.setFilterRole(filterRole)
+                      }
                     />
                     <label
                       className={`usa-radio__label bg-${colorTokenForRole(
@@ -131,11 +132,13 @@ export const HomePage = () => {
               </div>
             </fieldset>
           </form>
-        )}
+        }
       </div>
       <div className="mobile:grid-col-12 tablet:grid-col-8">
-        {state.report.current === 'PROCESSING' && <div className="loader" />}
-        <SSPReport />
+        <SchematronReport />
+        {schematron.validator.current === 'PROCESSING' && (
+          <div className="loader" />
+        )}
       </div>
     </div>
   );
